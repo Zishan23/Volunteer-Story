@@ -27,11 +27,6 @@ class IndexView(View):
         gallery_images = [image for image in images if image.is_gallery]
         hero_image = hero_images[0] if hero_images else None
         divider_image = divider_images[0] if divider_images else None
-        print(type(hero_image))
-        print(type(divider_image))
-        print(hero_image.image)
-        print(divider_image.image)
-        print(gallery_images[0].image)
         context = {
             "featured_posts": featured_posts,
             "latest_posts": latest_posts,
