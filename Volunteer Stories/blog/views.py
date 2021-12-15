@@ -12,7 +12,7 @@ from django.views.generic import (
     View,
 )
 
-from accounts.models import Author
+from accounts.models import Author, Image
 from blog.forms import CommentForm, PostForm
 from blog.models import Category, Newsletter, Post
 
@@ -21,7 +21,24 @@ class IndexView(View):
     def get(self, request, *args, **kwargs):
         featured_posts = Post.objects.filter(featured=True)[0:3]
         latest_posts = Post.objects.order_by("-timestamp")[0:3]
-        context = {"featured_posts": featured_posts, "latest_posts": latest_posts}
+        images = Image.objects.filter(is_active=True)
+        hero_images = [image for image in images if image.is_hero]
+        divider_images = [image for image in images if image.is_divider]
+        gallery_images = [image for image in images if image.is_gallery]
+        hero_image = hero_images[0] if hero_images else None
+        divider_image = divider_images[0] if divider_images else None
+        print(type(hero_image))
+        print(type(divider_image))
+        print(hero_image.image)
+        print(divider_image.image)
+        print(gallery_images[0].image)
+        context = {
+            "featured_posts": featured_posts,
+            "latest_posts": latest_posts,
+            "hero_image": hero_image,
+            "divider_image": divider_image,
+            "gallery_images": gallery_images,
+            }
         return render(request, "blog/index.html", context=context)
 
     def post(self, request, *args, **kwargs):
