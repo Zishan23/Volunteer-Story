@@ -10,8 +10,13 @@
           <!-- post -->
           {% for post in page_obj %}
           <div class="post col-xl-6">
-            <div class="post-thumbnail"><a href="{{ post.get_absolute_url }}"><img src="{{ post.thumbnail.url }}"
-                  alt="..." class="img-fluid"></a></div>
+            <div class="post-thumbnail">
+              <a href="{{ post.get_absolute_url }}">
+                <img src="{{ post.thumbnail.url }}"
+                  style="height: 250px; width: 350px; object-fit: cover; object-position: center center;"
+                  alt="{{ post.title }}" class="img-fluid">
+              </a>
+            </div>
             <div class="post-details">
               <div class="post-meta d-flex justify-content-between">
                 <div class="category">
@@ -39,15 +44,23 @@
         <nav aria-label="Page navigation example">
           <ul class="pagination pagination-template d-flex justify-content-center">
             {% if page_obj.has_previous %}
-            <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}" class="page-link"> <i
-                  class="fa fa-angle-left"></i></a></li>
+            <li class="page-item">
+              <a href="?page={{ page_obj.previous_page_number }}" class="page-link">
+                <i class="fa fa-angle-left"></i>
+              </a>
+            </li>
             {% endif %}
-            <li class="page-item"><a href="?page={{ page_obj.number }}"
-                class="page-link active">{{ page_obj.number }}</a>
+            <li class="page-item">
+              <a href="?page={{ page_obj.number }}" class="page-link active">
+                {{ page_obj.number }}
+              </a>
             </li>
             {% if page_obj.has_next %}
-            <li class="page-item"><a href="?page={{ page_obj.next_page_number }}" class="page-link"> <i
-                  class="fa fa-angle-right"></i></a></li>
+            <li class="page-item">
+              <a href="?page={{ page_obj.next_page_number }}" class="page-link">
+                <i class="fa fa-angle-right"></i>
+              </a>
+            </li>
             {% endif %}
           </ul>
         </nav>
@@ -76,7 +89,7 @@
           {% for post in latest_posts %}
           <a href="#">
             <div class="item d-flex align-items-center">
-              <div class="image"><img src="{{ post.thumbnail.url }}" alt="..." class="img-fluid"></div>
+              <div class="image"><img src="{{ post.thumbnail.url }}" alt="{{ post.title }}" class="img-fluid"></div>
               <div class="title"><strong>{{ post.title }}</strong>
                 <div class="d-flex align-items-center">
                   <div class="views"><i class="icon-eye"></i> 500</div>

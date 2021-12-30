@@ -3,7 +3,7 @@
 {% block content %}
 <!-- Hero Section-->
 <section
-  style="background: url({% static 'blog/img/hero.jpg' %}); background-size: cover; background-position: center center"
+  style="background: url('{{ hero_image.image.url }}'); background-size: cover; background-position: center center; background-repeat: no-repeat;"
   class="hero">
   <div class="container">
     <div class="row">
@@ -35,7 +35,7 @@
     {% for post in featured_posts %}
     <div class="row d-flex align-items-stretch">
       {% if not forloop.first and not forloop.last %}
-      <div class="image col-lg-5"><img src="{{ post.thumbnail.url }}" alt="..."></div>
+      <div class="image col-lg-5"><img src="{{ post.thumbnail.url }}" alt="{{ post.title }}"></div>
       {% endif %}
       <div class="text col-lg-7">
         <div class="text-inner d-flex align-items-center">
@@ -62,7 +62,10 @@
         </div>
       </div>
       {% if forloop.first or forloop.last %}
-      <div class="image col-lg-5"><img src="{{ post.thumbnail.url }}" alt="..."></div>
+      <div class="image col-lg-5">
+        <img src="{{ post.thumbnail.url }}"
+        alt="{{ post.title }}">
+      </div>
       {% endif %}
     </div>
     {% endfor %}
@@ -70,15 +73,15 @@
 </section>
 <!-- Divider Section-->
 <section
-  style="background: url({% static 'blog/img/divider-bg.jpg' %}); background-size: cover; background-position: center bottom"
+  style="background: url('{{ divider_image.image.url }}'); background-size: cover; background-position: center bottom; background-repeat: no-repeat;"
   class="divider">
   <div class="container">
     <div class="row">
       <div class="col-md-7">
         <div class="blockquote">
-          <blockquote class="h2">How does the Meadow flower its bloom unfold? Because the lovely little flower is free
-            down to its root, and in that
-            freedom bold.</blockquote>
+          <blockquote class="h2">
+            How does the Meadow flower its bloom unfold? Because the lovely little flower is free down to its root, and in that freedom bold.
+          </blockquote>
           <blockquote class="blockquote-footer">William Wordsworth</blockquote>
         </div>
       </div>
@@ -93,16 +96,22 @@
     </header>
     <div class="row">
       {% for post in latest_posts %}
-      <div class="post col-md-4">
-        <div class="post-thumbnail"><a href="{{ post.get_absolute_url }}"><img src="{{ post.thumbnail.url }}"
-              class="img-fluid"></a>
+      <div class="post col-md-6">
+        <div class="post-thumbnail">
+          <a href="{{ post.get_absolute_url }}">
+            <img src="{{ post.thumbnail.url }}"
+            style="height: 350px; width: auto; object-fit: cover; object-position: center center;"
+            class="img-fluid">
+          </a>
         </div>
         <div class="post-details">
           <div class="post-meta d-flex justify-content-between">
             <div class="date">{{ post.timestamp }}</div>
-            <div class="category">{% for category in post.category.all %}
+            <div class="category">
+              {% for category in post.category.all %}
               <a href="#">{{ category }}</a>
-              {% endfor %}</div>
+              {% endfor %}
+            </div>
           </div><a href="{{ post.get_absolute_url }}">
             <h3 class="h4">{{ post.title }}</h3>
           </a>
@@ -113,21 +122,24 @@
     </div>
   </div>
 </section>
+
+{% if not is_subscribed %}
 <!-- Newsletter Section-->
 <section class="newsletter no-padding-top">
   <div class="container">
     <div class="row">
       <div class="col-md-6">
         <h2>Subscribe to Newsletter</h2>
-        <p class="text-big">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua.</p>
+        <p class="text-big">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </p>
       </div>
       <div class="col-md-8">
         <div class="form-holder">
           <form action="{% url 'index' %}" method="POST">
             <div class="form-group">
               {% csrf_token %}
-              <input type="email" name="email" id="email" placeholder="Type your email address" minlength="8">
+              <input type="email" name="email" id="email" value="{{ request.user.email }}" hidden>
               <input type="submit" class="submit" value="Subscribe" >
             </div>
           </form>
@@ -147,33 +159,24 @@
     </div>
   </div>
 </section>
+{% endif %}
+
 <!-- Gallery Section-->
 <section class="gallery no-padding">
   <div class="row">
+    {% for image in gallery_images %}
     <div class="mix col-lg-3 col-md-3 col-sm-6">
-      <div class="item"><a href="{% static 'blog/img/gallery-1.jpg' %}" data-fancybox="gallery" class="image"><img
-            src="{% static 'blog/img/gallery-1.jpg' %}" alt="..." class="img-fluid">
-          <div class="overlay d-flex align-items-center justify-content-center"><i class="icon-search"></i></div>
-        </a></div>
+      <div class="item"><a href="{{ image.image.url }}" data-fancybox="gallery" class="image">
+        <img
+            src="{{ image.image.url }}" alt="..." class="img-fluid">
+          <div class="overlay d-flex align-items-center justify-content-center">
+            <i class="icon-search"></i>
+          </div>
+        </a>
+      </div>
     </div>
-    <div class="mix col-lg-3 col-md-3 col-sm-6">
-      <div class="item"><a href="{% static 'blog/img/gallery-2.jpg' %}" data-fancybox="gallery" class="image"><img
-            src="{% static 'blog/img/gallery-2.jpg' %}" alt="..." class="img-fluid">
-          <div class="overlay d-flex align-items-center justify-content-center"><i class="icon-search"></i></div>
-        </a></div>
-    </div>
-    <div class="mix col-lg-3 col-md-3 col-sm-6">
-      <div class="item"><a href="{% static 'blog/img/gallery-3.jpg' %}" data-fancybox="gallery" class="image"><img
-            src="{% static 'blog/img/gallery-3.jpg' %}" alt="..." class="img-fluid">
-          <div class="overlay d-flex align-items-center justify-content-center"><i class="icon-search"></i></div>
-        </a></div>
-    </div>
-    <div class="mix col-lg-3 col-md-3 col-sm-6">
-      <div class="item"><a href="{% static 'blog/img/gallery-4.jpg' %}" data-fancybox="gallery" class="image"><img
-            src="{% static 'blog/img/gallery-4.jpg' %}" alt="..." class="img-fluid">
-          <div class="overlay d-flex align-items-center justify-content-center"><i class="icon-search"></i></div>
-        </a></div>
-    </div>
+    {% endfor %}
   </div>
 </section>
+
 {% endblock content %}

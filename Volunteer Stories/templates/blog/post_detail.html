@@ -1,5 +1,6 @@
 {% extends './layout.html' %}
 {% load  static i18n crispy_forms_tags %}
+{% load social_share %}
 {% block content %}
 <div class="container">
   <div class="row">
@@ -32,14 +33,23 @@
               </div>
               {% if request.user.author == post.author %}
               <div class="ml-5 d-flex flex-end">
-                <a href="{{ post.get_update_url }}" class="btn btn-secondary">Update</a>
-                <a href="{{ post.get_delete_url }}" class="btn btn-danger">Delete</a>
+                <a href="{{ post.get_update_url }}" class="btn btn-secondary">
+                  <i class="fa fa-pencil"></i> Update
+                </a>
+                <a href="{{ post.get_delete_url }}" class="btn btn-danger">
+                  <i class="fa fa-trash"></i> Delete
+                </a>
               </div>
               {% endif %}
             </div>
 
             <div class="post-body">
               {{ post.content|safe }}
+            </div>
+
+            <div class="row">
+              {% post_to_facebook object_or_url "Share on Facebook!" "btn btn-primary m-2" %}
+              {% post_to_whatsapp object_or_url "Share via Whatsapp" "btn btn-success m-2" %}
             </div>
 
             <div class="post-comments">

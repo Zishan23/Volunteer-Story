@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     "storages",
     "tinymce",
     "crispy_forms",
+    "django_social_share",
+    "colorfield",
 ]
 
 MIDDLEWARE = [
