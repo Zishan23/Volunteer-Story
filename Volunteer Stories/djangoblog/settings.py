@@ -23,7 +23,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    # "jazzmin",
+    "jazzmin",
     "blog.apps.BlogConfig",
     "accounts.apps.AccountsConfig",
     "django.contrib.admin",
@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     "storages",
     "tinymce",
     "crispy_forms",
+    "django_social_share",
+    "colorfield",
 ]
 
 MIDDLEWARE = [
