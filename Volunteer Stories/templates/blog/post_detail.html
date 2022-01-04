@@ -1,5 +1,5 @@
 {% extends './layout.html' %}
-{% load  static i18n crispy_forms_tags %}
+{% load static i18n crispy_forms_tags %}
 {% load social_share %}
 {% block content %}
 <div class="container">
@@ -18,7 +18,7 @@
                 {% endfor %}
               </div>
             </div>
-            <h1 id="post-title" >{{ post.title }}<a href="#"><i class="fa fa-bookmark-o"></i></a>
+            <h1 id="post-title">{{ post.title }}<a href="#"><i class="fa fa-bookmark-o"></i></a>
 
             </h1>
             <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="#"
@@ -45,11 +45,16 @@
 
             <div class="post-body">
               {{ post.content|safe }}
-            </div>
-
-            <div class="row">
-              {% post_to_facebook object_or_url "Share on Facebook!" "btn btn-primary m-2" %}
-              {% post_to_whatsapp object_or_url "Share via Whatsapp" "btn btn-success m-2" %}
+              <hr />
+              <span>Share via</span>
+              <a href="https://www.facebook.com/sharer/sharer.php?u=https://127.0.0.1:8000{{ post.get_absolute_url }}"
+                target="_blank" class="p-3 m-2" rel="nofollow">
+                <i class="fa fa-facebook"></i>
+              </a>
+              <a href="https://twitter.com/share?url=http://127.0.0.1:8000{{ post.get_absolute_url }}" target="_blank"
+                class="p-3 m-2" rel="nofollow">
+                <i class="fa fa-twitter"></i>
+              </a>
             </div>
 
             <div class="post-comments">
@@ -62,8 +67,8 @@
                   <div class="user d-flex align-items-center">
                     <div class="image"><img src="{{ comment.user.picture.url }}" alt="..."
                         class="img-fluid rounded-circle"></div>
-                    <div class="title"><strong>{{ comment.user }}</strong><span
-                        class="date">{{ comment.timestamp|timesince }}</span></div>
+                    <div class="title"><strong>{{ comment.user }}</strong><span class="date">{{
+                        comment.timestamp|timesince }}</span></div>
                   </div>
                 </div>
                 <div class="comment-body">
@@ -71,7 +76,7 @@
                 </div>
               </div>
               {% endfor %}
-              <div class="add-comment" id="add-comment" >
+              <div class="add-comment" id="add-comment">
                 <header>
                   <h3 class="h6">Leave a comment</h3>
                 </header>
