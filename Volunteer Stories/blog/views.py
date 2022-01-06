@@ -19,6 +19,7 @@ from blog.models import Category, Newsletter, Post
 
 class IndexView(View):
     def get(self, request, *args, **kwargs):
+        page_name = "Home"
         featured_posts = Post.objects.filter(featured=True)[0:3]
         latest_posts = Post.objects.order_by("-timestamp")[0:2]
         images = Image.objects.filter(is_active=True)
@@ -33,13 +34,14 @@ class IndexView(View):
                 Q(email=request.user.email)
             ).exists()
         context = {
+            "page_name": page_name,
             "featured_posts": featured_posts,
             "latest_posts": latest_posts,
             "hero_image": hero_image,
             "divider_image": divider_image,
             "gallery_images": gallery_images,
             "is_subscribed": is_subscribed,
-            }
+        }
         return render(request, "blog/index.html", context=context)
 
     def post(self, request, *args, **kwargs):
@@ -76,13 +78,14 @@ class PostDetailView(DetailView):
 
 
 class PostListView(ListView):
-
+    page_name = "Blog"
     model = Post
     template_name = "blog/post_list.html"
     paginate_by = 4
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["page_name"] = self.page_name
         context["latest_posts"] = Post.objects.all().order_by("-timestamp")[0:3]
         context["categories"] = Category.objects.all()
         return context

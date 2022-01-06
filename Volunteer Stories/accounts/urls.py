@@ -13,4 +13,6 @@ urlpatterns = [
         login_required(views.AuthorUpdateView.as_view()),
         name="accounts_update",
     ),
+    path("about-us", views.about_us_view, name="about_us"),
+    path("join-us", views.join_us_view, name="join_as_volunteer"),
 ]

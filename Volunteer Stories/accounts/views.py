@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, View
 
-from accounts.forms import AuthorForm, UserForm, UserUpdateForm
+from accounts.forms import AuthorForm, UserForm, UserUpdateForm, VolunteerJoinForm
 from accounts.models import Author
 from blog.models import Newsletter
 
@@ -36,3 +36,31 @@ class AuthorUpdateView(View):
             user_form.save()
             author_form.save()
         return redirect("accounts_update")
+
+
+def about_us_view(request):
+    page_name = "About"
+    context = {
+        "page_name": page_name,
+    }
+    return render(request, "utility/about_us.html", context)
+
+
+def join_us_view(request):
+    page_name = "Join"
+    form = VolunteerJoinForm()
+    if request.method == "POST":
+        form = VolunteerJoinForm(request.POST)
+        print(form)
+        if form.is_valid():
+            form.save()
+            context = {
+                "page_name": page_name,
+                "submitted": True,
+            }
+            return render(request, "utility/volunteer_join.html", context)
+    context = {
+        "page_name": page_name,
+        "form": form,
+    }
+    return render(request, "utility/volunteer_join.html", context)
