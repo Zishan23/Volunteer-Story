@@ -1,0 +1,31 @@
+{% extends '../blog/layout.html' %}
+{% load static i18n crispy_forms_tags %}
+{% block content %}
+<div class="row m-5">
+    <div class="col-lg-12">
+        <div class="text-center h3">Join as a Volunteer</div>
+        <hr />
+        {% if submitted %}
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="text-center">
+                    <img src="{% static 'blog/img/green-tick-icon.png' %}" style="height: 150px; width: 150px" />
+                    <p style="font-size: 30px">
+                        Information Submitted Successfully
+                    </p>
+                    <p style="font-size: 35px">
+                        Thank You for Sharing Your Information with Us
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <form method="POST">
+            {% csrf_token %}
+            {{form|crispy}}
+            <input type="submit" class="btn btn-block btn-primary" value="Join Volunteer Stories">
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
