@@ -1,13 +1,80 @@
 {% extends './layout.html' %}
-{% load static i18n crispy_forms_tags %}
+{% load widget_tweaks %}
 {% block content %}
 <div class="container jumbotron">
     <h4 class="h2 text-center">Create Post</h4>
-    <form action="{% url 'post_create' %}" method="post" enctype="multipart/form-data">
+    <form action="{% url 'post_create' %}" id="postform" data-sub-category-url="{% url 'ajax_load_subcategories' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{form|crispy }}
+        {{form.media}}
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label>Blog Title</label>
+                    {{ form.title|add_class:"form-control" }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label>Blog Overview</label>
+                    {{ form.overview|add_class:"form-control" }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label>Blog Content</label>
+                    {{ form.content|add_class:"form-control" }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-check">
+                    <p class="ml-3">{{ form.featured|add_class:"form-check-input" }} Featured Blog</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label>Blog Category</label>
+                    {{ form.category|add_class:"form-control" }}
+                </div>
+            </div><div class="col-lg-6">
+                <div class="form-group">
+                    <label>Blog Sub-Category</label>
+                    {{ form.sub_category|add_class:"form-control" }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label>Blog Cover Image</label>
+                    {{ form.thumbnail|add_class:"form-control" }}
+                </div>
+            </div>
+        </div>
         <input type="submit" class="btn btn-outline-primary" value="Create Post">
     </form>
 </div>
-{{form.media}}
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#id_category").change(function () {
+        var url =  $("#postform").attr("data-sub-category-url");
+        var category = $(this).val();
+        $.ajax({
+            url: url,
+            data: {
+                'category': category
+            },
+            success: function (data) {
+                $("#id_sub_category").html(data);
+            }
+        });
+    })
+</script>
 {% endblock content %}

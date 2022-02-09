@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 
 from celery.schedules import crontab
@@ -24,19 +22,25 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     "jazzmin",
+
+
     "blog.apps.BlogConfig",
     "accounts.apps.AccountsConfig",
+
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    
     "storages",
     "tinymce",
     "crispy_forms",
     "django_social_share",
-    "colorfield",
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

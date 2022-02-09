@@ -1,5 +1,5 @@
 {% extends './layout.html' %}
-{% load static i18n crispy_forms_tags %}
+{% load widget_tweaks %}
 {% load social_share %}
 {% block content %}
 <div class="container">
@@ -18,16 +18,19 @@
                 {% endfor %}
               </div>
             </div>
-            <h1 id="post-title">{{ post.title }}<a href="#"><i class="fa fa-bookmark-o"></i></a>
-
+            <h1 id="post-title">
+              {{ post.title }}
+              <!-- <a href="#"><i class="fa fa-bookmark-o"></i></a> -->
             </h1>
+            <span class="btn-success p-1 mr-2 rounded">{{ post.category }}</span>
+            <span class="btn-info p-1 rounded">{{ post.sub_category }}</span>
             <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="#"
                 class="author d-flex align-items-center flex-wrap">
                 <div class="avatar"><img src="{{ post.author.picture.url }}" alt="..." class="img-fluid"></div>
                 <div class="title"><span>{{ post.author }}</span></div>
               </a>
               <div class="d-flex align-items-center flex-wrap">
-                <div class="date"><i class="icon-clock"></i>{{ post.timestamp|timesince }}</div>
+                <div class="date"><i class="icon-clock"></i>{{ post.timestamp|timesince }} ago</div>
                 <div class="views"><i class="icon-eye"></i> 500</div>
                 <div class="comments meta-last"><i class="icon-comment"></i>{{ post.comment.count }}</div>
               </div>
@@ -48,11 +51,11 @@
               <hr />
               <span>Share via</span>
               <a href="https://www.facebook.com/sharer/sharer.php?u=https://127.0.0.1:8000{{ post.get_absolute_url }}"
-                target="_blank" class="p-3 m-2" rel="nofollow">
+                target="_blank" class="p-3 m-2 btn-outline-info rounded-circle" rel="nofollow">
                 <i class="fa fa-facebook"></i>
               </a>
               <a href="https://twitter.com/share?url=http://127.0.0.1:8000{{ post.get_absolute_url }}" target="_blank"
-                class="p-3 m-2" rel="nofollow">
+                class="p-3 m-2 btn-outline-info rounded-circle" rel="nofollow">
                 <i class="fa fa-twitter"></i>
               </a>
             </div>
@@ -67,8 +70,8 @@
                   <div class="user d-flex align-items-center">
                     <div class="image"><img src="{{ comment.user.picture.url }}" alt="..."
                         class="img-fluid rounded-circle"></div>
-                    <div class="title"><strong>{{ comment.user }}</strong><span class="date">{{
-                        comment.timestamp|timesince }}</span></div>
+                    <div class="title"><strong>{{ comment.user }}</strong><span class="date">
+                      {{ comment.timestamp|timesince }} ago</span></div>
                   </div>
                 </div>
                 <div class="comment-body">
@@ -83,9 +86,16 @@
                 {% if user.is_authenticated %}
                 <form action="{% url 'post_detail' post.slug %}" method="POST" class="commenting-form">
                   {% csrf_token %}
-                  {{ comment_form|crispy }}
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="form-group">
+                        <label>Comment</label>
+                        {{ comment_form.content }}
+                      </div>
+                    </div>
+                  </div>
                   <div class="form-group col-md-12">
-                    <button type="submit" class="btn btn-outline-secondary">Submit Comment</button>
+                    <button type="submit" class="btn btn-outline-info">Submit Comment</button>
                   </div>
                 </form>
                 {% else %}
@@ -141,7 +151,27 @@
         </div>
         {% endfor %}
       </div>
-      <!-- Widget [Tags Cloud Widget]-->
+      <!-- Widget [Similar Posts Widget]-->
+      <div class="widget latest-posts">
+        <header>
+          <h3 class="h6">Similar Posts</h3>
+        </header>
+        <div class="blog-posts">
+          {% for post in similar_posts %}
+          <a href="#">
+            <div class="item d-flex align-items-center">
+              <div class="image"><img src="{{ post.thumbnail.url }}" alt="..." class="img-fluid"></div>
+              <div class="title"><strong>{{ post.title }}</strong>
+                <div class="d-flex align-items-center">
+                  <div class="views"><i class="icon-eye"></i> 500</div>
+                  <div class="comments"><i class="icon-comment"></i>{{ post.comment.count }}</div>
+                </div>
+              </div>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
     </aside>
   </div>
 </div>

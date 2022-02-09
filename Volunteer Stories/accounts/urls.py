@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.contrib.auth.decorators import login_required
 from django.urls import path
 
@@ -14,5 +13,6 @@ urlpatterns = [
         name="accounts_update",
     ),
     path("about-us", views.about_us_view, name="about_us"),
+    path("our-team", views.our_team_view, name="our_team"),
     path("join-us", views.join_us_view, name="join_as_volunteer"),
 ]
