@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import redirect, render, reverse
 from django.urls import reverse_lazy
+from django.utils.text import slugify
 from django.views.generic import (
-    CreateView,
     DeleteView,
     DetailView,
     ListView,
@@ -14,7 +13,7 @@ from django.views.generic import (
 
 from accounts.models import Author, Image
 from blog.forms import CommentForm, PostForm
-from blog.models import Category, Newsletter, Post
+from blog.models import Category, SubCategory, Newsletter, Post
 
 
 class IndexView(View):
@@ -54,27 +53,26 @@ class IndexView(View):
         return redirect("index")
 
 
-class PostDetailView(DetailView):
+def post_detail_view(request, slug):
+    post = Post.objects.get(slug=slug)
+    latest_posts = Post.objects.all().order_by("-timestamp")[0:3]
+    similar_posts = Post.objects.filter(category=post.category)[0:3]
+    categories = Category.objects.all()
 
-    model = Post
-    template_name = "blog/post_detail.html"
-    _comment_form = CommentForm()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["latest_posts"] = Post.objects.all().order_by("-timestamp")[0:3]
-        context["categories"] = Category.objects.all()
-        context["comment_form"] = self._comment_form
-        return context
-
-    def post(self, request, *args, **kwargs):
-        _post = self.get_object()
-        _comment_form = CommentForm(request.POST)
-        if _comment_form.is_valid():
-            _comment_form.instance.user = request.user.author
-            _comment_form.instance.post = _post
-            _comment_form.save()
-            return redirect(_post)
+    comment_form = CommentForm(request.POST)
+    if comment_form.is_valid():
+        comment_form.instance.user = request.user.author
+        comment_form.instance.post = post
+        comment_form.save()
+        return redirect(reverse("post_detail", kwargs={"slug": post.slug}))
+    context = {
+        "post": post,
+        "latest_posts": latest_posts,
+        "categories": categories,
+        "similar_posts": similar_posts,
+        "comment_form": comment_form,
+    }
+    return render(request, "blog/post_detail.html", context=context)
 
 
 class PostListView(ListView):
@@ -91,6 +89,16 @@ class PostListView(ListView):
         return context
 
 
+def categorized_post_view(request, category):
+    category = Category.objects.get(name=category)
+    posts = Post.objects.filter(category=category)
+    context = {
+        "posts": posts,
+        "category": category,
+    }
+    return render(request, "blog/categorized_post.html", context=context)
+
+
 class SearchView(View):
     def get(self, request, *args, **kwargs):
         q = request.GET.get("q", "")
@@ -101,15 +109,18 @@ class SearchView(View):
         return render(request, "blog/search.html", context=context)
 
 
-class PostCreateView(CreateView):
-    model = Post
-    template_name = "blog/post_create.html"
-    form_class = PostForm
+def post_create_view(request):
+    form = PostForm(request.POST or None, request.FILES or None)
 
-    def form_valid(self, form):
-        form.instance.author = Author.objects.filter(user=self.request.user).first()
-        form.save()
-        return redirect(reverse("post_detail", kwargs={"slug": form.instance.slug}))
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.author = Author.objects.filter(user=request.user).first()
+        instance.slug = slugify(instance.title, instance.id)
+        instance.save()
+        messages.success(request, "Successfully created")
+        return redirect(reverse("post_detail", kwargs={"slug": instance.slug}))
+    context = {"form": form}
+    return render(request, "blog/post_create.html", context=context)
 
 
 class PostUpdateView(UpdateView):
@@ -127,3 +138,10 @@ class PostDeleteView(DeleteView):
     model = Post
     template_name = "blog/post_delete.html"
     success_url = reverse_lazy("index")
+
+
+def load_sub_categories(request):
+    category = request.GET.get("category")
+    print(category)
+    subcategories = SubCategory.objects.filter(category=category)
+    return render(request, "blog/sub-categories.html", {"subcategories": subcategories})

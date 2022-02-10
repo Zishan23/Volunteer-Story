@@ -4,13 +4,13 @@
 <section class="latest-posts">
     <div class="container">
         <header>
-            <h2 id="search-result">Search results are ...</h2>
+            <h2 id="search-result">Search results...</h2>
         </header>
         <div class="row">
             {% for post in search_result %}
             <div class="post col-xl-6">
-                <div class="post-thumbnail"><a href="{{ post.get_absolute_url }}"><img src="{{ post.thumbnail.url }}"
-                            class="img-fluid"></a>
+                <div class="post-thumbnail">
+                    <a href="{{ post.get_absolute_url }}"><img src="{{ post.thumbnail.url }}" class="img-fluid"></a>
                 </div>
                 <div class="post-details">
                     <div class="post-meta d-flex justify-content-between">
@@ -19,7 +19,8 @@
                             <a href="#">{{ category }}</a>
                             {% endfor %}
                         </div>
-                    </div><a href="{{ post.get_absolute_url }}">
+                    </div>
+                    <a href="{{ post.get_absolute_url }}">
                         <h3 class="h4" id="post-title">{{ post.title }}</h3>
                     </a>
                     <p class="text-muted">{{ post.overview|linebreaks|truncatewords:50 }}</p>

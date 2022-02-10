@@ -11,7 +11,11 @@ import PIL.Image
 class Author(models.Model):
     user = models.OneToOneField(User, verbose_name=_("User"), on_delete=models.CASCADE)
     picture = models.ImageField(
-        _("Picture"), upload_to="thumbnail", default="testing.jpeg", null=True, blank=True
+        _("Picture"),
+        upload_to="thumbnail",
+        default="user-placeholder.jpg",
+        null=True,
+        blank=True,
     )
 
     class Meta:
@@ -34,7 +38,7 @@ class Author(models.Model):
 
 
 class Image(models.Model):
-    image = models.ImageField(_("Image"), upload_to="website_images",  blank=True)
+    image = models.ImageField(_("Image"), upload_to="website_images", blank=True)
     is_active = models.BooleanField(_("Is active"), default=False)
     is_hero = models.BooleanField(_("Is hero"), default=False)
     is_divider = models.BooleanField(_("Is divider"), default=False)
@@ -55,7 +59,9 @@ class Volunteer(models.Model):
     country = models.CharField(_("Country of Residence"), max_length=25)
     nationality = models.CharField(_("Nationality"), max_length=25)
     sector = models.CharField(_("Volunteering Sector"), max_length=255)
-    mode_of_communication = models.CharField(_("Preffered Mode of Communication"), max_length=50)
+    mode_of_communication = models.CharField(
+        _("Preffered Mode of Communication"), max_length=50
+    )
     photo_sharing_consent = models.BooleanField(_("Photo Sharing Consent"))
     nominee1_name = models.CharField(_("Nominee 1 Name"), max_length=100)
     nominee1_social_media = models.CharField(_("Nominee 1 Social Media"), max_length=50)

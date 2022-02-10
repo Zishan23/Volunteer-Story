@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, View
@@ -44,6 +43,13 @@ def about_us_view(request):
         "page_name": page_name,
     }
     return render(request, "utility/about_us.html", context)
+
+
+def our_team_view(request):
+    return render(
+        request,
+        "utility/our_team.html",
+    )
 
 
 def join_us_view(request):

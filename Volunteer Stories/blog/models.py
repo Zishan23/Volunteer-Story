@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
 from io import BytesIO
+from unicodedata import category
 
 from django.core.files.storage import default_storage
 from django.db import models
@@ -13,27 +13,51 @@ from accounts.models import Author
 
 
 class Category(models.Model):
-
     title = models.CharField(_("Title"), max_length=50)
+
+    def __str__(self):
+        return self.title
 
     class Meta:
         verbose_name = _("Category")
         verbose_name_plural = _("Categories")
 
+
+class SubCategory(models.Model):
+    category = models.ForeignKey(
+        Category, verbose_name=_("Category"), on_delete=models.CASCADE
+    )
+    title = models.CharField(_("Title"), max_length=50)
+
     def __str__(self):
         return self.title
 
+    class Meta:
+        verbose_name = _("Sub-Category")
+        verbose_name_plural = _("Sub-Categories")
+
 
 class Post(models.Model):
-
     title = models.CharField(_("Title"), max_length=100)
     overview = models.TextField(_("Overview"), default="")
     timestamp = models.DateTimeField(_("Timestamp"), auto_now=True)
-
     content = HTMLField(default="<p>Hello World</p>")
     featured = models.BooleanField(_("Featured"), default=False)
-    category = models.ManyToManyField(
-        Category, verbose_name=_("Category"), related_name="post"
+    category = models.ForeignKey(
+        Category,
+        verbose_name=_("Category"),
+        related_name="post",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+    sub_category = models.ForeignKey(
+        SubCategory,
+        verbose_name=_("Sub-Category"),
+        related_name="post",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
     )
     author = models.ForeignKey(
         Author, verbose_name=_("Author"), on_delete=models.CASCADE
@@ -63,7 +87,7 @@ class Post(models.Model):
         return reverse("post_delete", kwargs={"slug": self.slug})
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
+        self.slug = slugify(self.title, self.timestamp)
         super().save(*args, **kwargs)
         if self.thumbnail:
             img = Image.open(default_storage.open(self.thumbnail.name))
@@ -76,7 +100,6 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-
     user = models.ForeignKey(Author, verbose_name=_("user"), on_delete=models.CASCADE)
     timestamp = models.DateTimeField(_("Timestamp"), auto_now=True)
     content = models.TextField(_("Content"))
@@ -93,7 +116,6 @@ class Comment(models.Model):
 
 
 class Newsletter(models.Model):
-
     email = models.EmailField(_("Email"), max_length=254)
     timestamp = models.DateTimeField(_("Timestamp"), auto_now=True)
 

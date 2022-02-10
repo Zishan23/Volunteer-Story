@@ -1,7 +1,12 @@
-# -*- coding: utf-8 -*-
 from django.contrib import admin
 from django.utils.html import format_html
 from accounts.models import Author, Image, Volunteer
+
+
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ["user", "picture",]
+    list_filter = []
+    search_fields = []
 
 
 class ImageAdmin(admin.ModelAdmin):
@@ -30,6 +35,28 @@ class ImageAdmin(admin.ModelAdmin):
     list_filter = ()
 
 
-admin.site.register(Author)
+class VolunteerAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "email",
+        "phone",
+        "gender",
+        "country",
+        "created_at",
+        "updated_at",
+    )
+    search_fields = ()
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+    )
+
+    filter_horizontal = ()
+    ordering = ("-created_at",)
+    fieldsets = ()
+    list_filter = ()
+
+
+admin.site.register(Author, AuthorAdmin)
 admin.site.register(Image, ImageAdmin)
-admin.site.register(Volunteer)
+admin.site.register(Volunteer, VolunteerAdmin)
