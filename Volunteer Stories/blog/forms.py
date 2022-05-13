@@ -1,26 +1,5 @@
-# -*- coding: utf-8 -*-
 from django import forms
-from tinymce.widgets import TinyMCE
-
-from blog.models import Comment, Post
-
-
-class PostForm(forms.ModelForm):
-    content = forms.CharField(
-        widget=TinyMCE(attrs={"cols": 80, "rows": 15, "class": "form-control"})
-    )
-
-    class Meta:
-        model = Post
-        fields = (
-            "title",
-            "overview",
-            "content",
-            "featured",
-            "category",
-            "sub_category",
-            "thumbnail",
-        )
+from blog.models import Comment, Newsletter
 
 
 class CommentForm(forms.ModelForm):
@@ -36,4 +15,20 @@ class CommentForm(forms.ModelForm):
 
     class Meta:
         model = Comment
-        fields = ("content",)
+        fields = ("name", "email", "content",)
+
+
+class NewsletterForm(forms.ModelForm):
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Your email address",
+                "required": True,
+            }
+        )
+    )
+
+    class Meta:
+        model = Newsletter
+        fields = ("email",)

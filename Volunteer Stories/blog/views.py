@@ -11,8 +11,8 @@ from django.views.generic import (
     View,
 )
 
-from accounts.models import Author, Image
-from blog.forms import CommentForm, PostForm
+from accounts.models import Image
+from blog.forms import *
 from blog.models import Category, SubCategory, Newsletter, Post
 
 
@@ -27,11 +27,15 @@ class IndexView(View):
         gallery_images = [image for image in images if image.is_gallery]
         hero_image = hero_images[0] if hero_images else None
         divider_image = divider_images[0] if divider_images else None
-        is_subscribed = False
-        if request.user.is_authenticated:
-            is_subscribed = Newsletter.objects.filter(
-                Q(email=request.user.email)
-            ).exists()
+        
+        newsletter_form = NewsletterForm()
+        if request.method == "POST":
+            newsletter_form = NewsletterForm(request.POST)
+            if newsletter_form.is_valid():
+                newsletter_form.save()
+                messages.info(request, "Successfully subscribed!")
+                return redirect("index")
+        
         context = {
             "page_name": page_name,
             "featured_posts": featured_posts,
@@ -39,7 +43,7 @@ class IndexView(View):
             "hero_image": hero_image,
             "divider_image": divider_image,
             "gallery_images": gallery_images,
-            "is_subscribed": is_subscribed,
+            "newsletter_form": newsletter_form,
         }
         return render(request, "blog/index.html", context=context)
 
@@ -61,7 +65,6 @@ def post_detail_view(request, slug):
 
     comment_form = CommentForm(request.POST)
     if comment_form.is_valid():
-        comment_form.instance.user = request.user.author
         comment_form.instance.post = post
         comment_form.save()
         return redirect(reverse("post_detail", kwargs={"slug": post.slug}))
@@ -109,39 +112,9 @@ class SearchView(View):
         return render(request, "blog/search.html", context=context)
 
 
-def post_create_view(request):
-    form = PostForm(request.POST or None, request.FILES or None)
-
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.author = Author.objects.filter(user=request.user).first()
-        instance.slug = slugify(instance.title, instance.id)
-        instance.save()
-        messages.success(request, "Successfully created")
-        return redirect(reverse("post_detail", kwargs={"slug": instance.slug}))
-    context = {"form": form}
-    return render(request, "blog/post_create.html", context=context)
-
-
-class PostUpdateView(UpdateView):
-    model = Post
-    template_name = "blog/post_update.html"
-    form_class = PostForm
-
-    def form_valid(self, form):
-        if form.instance.author == self.request.user.author:
-            form.save()
-            return redirect(reverse("post_detail", kwargs={"slug": form.instance.slug}))
-
-
-class PostDeleteView(DeleteView):
-    model = Post
-    template_name = "blog/post_delete.html"
-    success_url = reverse_lazy("index")
-
-
 def load_sub_categories(request):
     category = request.GET.get("category")
-    print(category)
+    print('category', category)
     subcategories = SubCategory.objects.filter(category=category)
+    print('subcategories', subcategories)
     return render(request, "blog/sub-categories.html", {"subcategories": subcategories})

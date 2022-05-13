@@ -27,10 +27,10 @@ class SubCategoryAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ["user", "content", "post", "timestamp"]
-    list_display_links = ["user"]
-    list_filter = ["user"]
-    search_fields = ["user"]
+    list_display = ["name", "email", "content", "post", "timestamp"]
+    list_display_links = ["name"]
+    list_filter = ["name"]
+    search_fields = ["name"]
     list_per_page = 25
 
 

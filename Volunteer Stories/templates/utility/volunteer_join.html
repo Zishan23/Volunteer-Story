@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row m-5">
         <div class="col-lg-12">
-            <div class="text-center h3">Join as a Volunteer</div>
+            <div class="text-center h3">Submit Your Story</div>
             <hr />
             {% if submitted %}
             <div class="row">
@@ -22,8 +22,9 @@
                 </div>
             </div>
             {% else %}
-            <form method="POST">
-                {% csrf_token %}<div class="alert alert-info" role="alert">
+            <form method="POST" id="storyForm" data-sub-category-url="{% url 'ajax_load_subcategories' %}"  enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="alert alert-info" role="alert">
                     <b>Personal Information</b>
                 </div>
                 <div class="row">
@@ -111,6 +112,14 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>Your Image</label>
+                            {{ form.image|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <!-- <div class="col-lg-12"> -->
                     <div class="form-check">
                         <p>Do you agree to let <b>Volunteer Stories</b> publish your photo along with your story? </p>
@@ -182,12 +191,79 @@
                             {{ form.nominee2_contact|add_class:"form-control" }}
                         </div>
                     </div>
+                </div><hr />
+                <div class="alert alert-info" role="alert">
+                    <b>Your Story</b>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>Story Title</label>
+                            {{ form.story_title|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>Story Overview</label>
+                            {{ form.story_overview|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Story Category</label>
+                            {{ form.story_category|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Story Sub-category</label>
+                            {{ form.story_sub_category|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>Story Content</label>
+                            {{ form.story_content|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>Story Image</label>
+                            {{ form.story_image|add_class:"form-control" }}
+                        </div>
+                    </div>
                 </div>
 
-                <input type="submit" class="btn btn-block btn-primary" value="Join Volunteer Stories">
+                <input type="submit" class="btn btn-block btn-primary" value="Submit Story">
             </form>
             {% endif %}
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#id_story_category").change(function () {
+        var url = $("#storyForm").attr("data-sub-category-url");
+        var category = $(this).val();
+        $.ajax({
+            url: url,
+            data: {
+                'category': category
+            },
+            success: function (data) {
+                $("#id_story_sub_category").html(data);
+            }
+        });
+    })
+</script>
+
 {% endblock %}

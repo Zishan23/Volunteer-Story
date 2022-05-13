@@ -1,12 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from accounts.models import Author, Image, Volunteer
-
-
-class AuthorAdmin(admin.ModelAdmin):
-    list_display = ["user", "picture",]
-    list_filter = []
-    search_fields = []
+from accounts.models import Image, Volunteer
 
 
 class ImageAdmin(admin.ModelAdmin):
@@ -42,8 +36,8 @@ class VolunteerAdmin(admin.ModelAdmin):
         "phone",
         "gender",
         "country",
+        "assigned_to",
         "created_at",
-        "updated_at",
     )
     search_fields = ()
     readonly_fields = (
@@ -57,6 +51,5 @@ class VolunteerAdmin(admin.ModelAdmin):
     list_filter = ()
 
 
-admin.site.register(Author, AuthorAdmin)
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Volunteer, VolunteerAdmin)

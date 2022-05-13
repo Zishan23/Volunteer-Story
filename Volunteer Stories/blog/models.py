@@ -1,6 +1,5 @@
 from io import BytesIO
 from unicodedata import category
-
 from django.core.files.storage import default_storage
 from django.db import models
 from django.shortcuts import reverse
@@ -8,8 +7,6 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
 from tinymce.models import HTMLField
-
-from accounts.models import Author
 
 
 class Category(models.Model):
@@ -59,9 +56,6 @@ class Post(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
     )
-    author = models.ForeignKey(
-        Author, verbose_name=_("Author"), on_delete=models.CASCADE
-    )
     thumbnail = models.ImageField(
         _("Thumbnail"), upload_to="thumbnail", default="testing.jpeg", blank=True
     )
@@ -100,7 +94,8 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(Author, verbose_name=_("user"), on_delete=models.CASCADE)
+    name = models.CharField(_("Name"), max_length=50)
+    email = models.EmailField(_("Email"), max_length=254)
     timestamp = models.DateTimeField(_("Timestamp"), auto_now=True)
     content = models.TextField(_("Content"))
     post = models.ForeignKey(
@@ -110,9 +105,6 @@ class Comment(models.Model):
     class Meta:
         verbose_name = _("comment")
         verbose_name_plural = _("comments")
-
-    def __str__(self):
-        return self.user.user.username
 
 
 class Newsletter(models.Model):

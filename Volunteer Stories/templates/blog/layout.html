@@ -68,15 +68,31 @@
 
                     <ul class="navbar-nav ml-auto">
 
-                        <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Home</a>
+                        <li class="nav-item"><a href="{% url 'index' %}"
+                            {% if page_name == "Home" %}
+                            class="nav-link active"
+                            {% else %}
+                            class="nav-link"
+                            {% endif %}
+                            >
+                            Home
+                            </a>
                         </li>
-                        <li class="nav-item"><a href="{% url 'post_list' %}" class="nav-link">Blog</a>
+                        <li class="nav-item"><a href="{% url 'post_list' %}"
+                            {% if page_name == "Blog" %}
+                            class="nav-link active"
+                            {% else %}
+                            class="nav-link"
+                            {% endif %}
+                            >
+                                Blog
+                            </a>
                         </li>
-                        <li class="nav-item"><a href="{% url 'post_create' %}" class="nav-link">Post A Story</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="dropdown02" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">About Us <i class="icofont-thin-down"></i></a>
+                            <a class="nav-link dropdown-toggle" href="#" id="dropdown02" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">About Us <i
+                                    class="icofont-thin-down"></i></a>
                             <ul class="dropdown-menu" aria-labelledby="dropdown02">
                                 <li><a class="dropdown-item" href="{% url 'about_us' %}">
                                         <i class="icofont-blood-drop"></i> Learn About Us</a></li>
@@ -84,14 +100,16 @@
                                         <i class="fas fa-hand-holding-medical"></i> Our Team</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item"><a href="{% url 'join_as_volunteer' %}" class="nav-link">Join as a
-                                Volunteer</a>
+                        <li class="nav-item"><a href="{% url 'submit_your_story' %}"
+                            {% if page_name == "Submit Story" %}
+                            class="nav-link active"
+                            {% else %}
+                            class="nav-link"
+                            {% endif %}
+                            >
+                                Submit Your Story
+                            </a>
                         </li>
-                        {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <a href="{% url 'accounts_update' %}" class="nav-link ">Profile</a>
-                        </li>
-                        {% endif %}
                     </ul>
                     <div class="navbar-text">
                         <a href="#" class="search-btn"><i class="icon-search-1"></i></a>
