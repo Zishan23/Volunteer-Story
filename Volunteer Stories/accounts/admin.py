@@ -39,7 +39,9 @@ class VolunteerAdmin(admin.ModelAdmin):
         "assigned_to",
         "created_at",
     )
-    search_fields = ()
+    search_fields = (
+        "assigned_to",
+    )
     readonly_fields = (
         "created_at",
         "updated_at",
@@ -48,7 +50,9 @@ class VolunteerAdmin(admin.ModelAdmin):
     filter_horizontal = ()
     ordering = ("-created_at",)
     fieldsets = ()
-    list_filter = ()
+    list_filter = (
+        "assigned_to",
+    )
 
 
 admin.site.register(Image, ImageAdmin)
