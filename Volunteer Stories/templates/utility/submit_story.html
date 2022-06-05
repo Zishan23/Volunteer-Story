@@ -1,0 +1,269 @@
+{% extends '../blog/layout.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container">
+    <div class="row m-5">
+        <div class="col-lg-12">
+            <div class="text-center h3">Submit Your Story</div>
+            <hr />
+            {% if submitted %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center">
+                        <img src="{% static 'blog/img/green-tick-icon.png' %}" style="height: 150px; width: 150px" />
+                        <p style="font-size: 30px">
+                            Information Submitted Successfully
+                        </p>
+                        <p style="font-size: 35px">
+                            Thank You for Sharing Your Information with Us
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <form method="POST" id="storyForm" data-sub-category-url="{% url 'ajax_load_subcategories' %}"  enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="alert alert-info" role="alert">
+                    <b>Personal Information</b>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Name</label>
+                            {{ form.name|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            {{ form.email|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Current Phone Number</label>
+                            {{ form.phone|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Whatsapp Number</label>
+                            {{ form.whatsapp|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Social Media Platform URL</label>
+                            {{ form.social_media|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Date of Birth</label>
+                            {{ form.date_of_birth|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Gender</label>
+                            {{ form.gender|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Pronouns</label>
+                            {{ form.pronouns|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Country of Residence</label>
+                            {{ form.country|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Nationality</label>
+                            {{ form.nationality|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Sector of Volunteering</label>
+                            {{ form.sector|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Frequently Used Communication Mode</label>
+                            {{ form.mode_of_communication|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>Your Image</label>
+                            {{ form.image|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- <div class="col-lg-12"> -->
+                    <div class="form-check">
+                        <p>Do you agree to let <b>Volunteer Stories</b> publish your photo along with your story? </p>
+                        <p class="ml-3">{{ form.photo_sharing_consent|add_class:"form-check-input" }} Yes (Leave empty if your answer is NO)</p>
+                        
+                    </div>
+                    <!-- </div> -->
+                </div>
+                <hr />
+                <div class="alert alert-info" role="alert">
+                    <b>Nominee 1 Information</b>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Name</label>
+                            {{ form.nominee1_name|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Social Media Platform URL</label>
+                            {{ form.nominee1_social_media|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Country of Residence</label>
+                            {{ form.nominee1_country|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Contact Information (Phone/Email ID/WhatsApp)</label>
+                            {{ form.nominee1_contact|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="alert alert-info" role="alert">
+                    <b>Nominee 2 Information</b>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Name</label>
+                            {{ form.nominee2_name|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Social Media Platform URL</label>
+                            {{ form.nominee2_social_media|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Country of Residence</label>
+                            {{ form.nominee2_country|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Contact Information (Phone/Email ID/WhatsApp)</label>
+                            {{ form.nominee2_contact|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div><hr />
+                <div class="alert alert-info" role="alert">
+                    <b>Your Story</b>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>Story Title</label>
+                            {{ form.story_title|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>Story Overview</label>
+                            {{ form.story_overview|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Story Category</label>
+                            {{ form.story_category|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Story Sub-category</label>
+                            {{ form.story_sub_category|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>Story Content</label>
+                            {{ form.story_content|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>Story Image</label>
+                            {{ form.story_image|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+
+                <input type="submit" class="btn btn-block btn-primary" value="Submit Story">
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#id_story_category").change(function () {
+        var url = $("#storyForm").attr("data-sub-category-url");
+        var category = $(this).val();
+        $.ajax({
+            url: url,
+            data: {
+                'category': category
+            },
+            success: function (data) {
+                $("#id_story_sub_category").html(data);
+            }
+        });
+    })
+</script>
+
+{% endblock %}

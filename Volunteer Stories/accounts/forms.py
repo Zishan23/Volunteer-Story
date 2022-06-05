@@ -1,15 +1,53 @@
 from django import forms
-from accounts.models import Volunteer
+from accounts.models import *
 from tinymce.widgets import TinyMCE
 
+GENDER_CHOICES = [
+    ("", "Select One"),
+    ("Male", "Male"),
+    ("Female", "Female"),
+    ("Other", "Other"),
+]
 
-class VolunteerJoinForm(forms.ModelForm):
-    GENDER_CHOICES = [
-        ("", "Select One"),
-        ("Male", "Male"),
-        ("Female", "Female"),
-        ("Other", "Other"),
-    ]
+BLOOD_GROUP_CHOICES = [
+    ("", "Select One"),
+    ("A+", "A+"),
+    ("A-", "A-"),
+    ("B+", "B+"),
+    ("B-", "B-"),
+    ("AB+", "AB+"),
+    ("AB-", "AB-"),
+    ("O+", "O+"),
+    ("O-", "O-"),
+]
+
+GOT_TO_KNOW_CHOICES = [
+    ("", "Select One"),
+    ("Facebook", "Facebook"),
+    ("Instagram", "Instagram"),
+    ("Linkedin", "Linkedin"),
+    ("Twitter", "Twitter"),
+    ("Friends", "Friends"),
+    ("Friends of friends", "Friends of friends"),
+    ("Family", "Family"),
+    ("Others", "Others"),
+]
+
+SUBSCRIBE_CHOICES = [
+    ("Yes", "Yes"),
+    ("No", "No"),
+    ("Maybe", "Maybe"),
+]
+
+POST_CHOICES = (
+    (1, 'Story Writer (Write a story from the interview)'),
+    (2, 'Interviewer (Take interview of our guests)'),
+    (3, 'Graphics Designer (Design Social Media Content and Edit Photos and Videos)'),
+    (4, 'Social Media Officer (Handle and Prepare Content for Social Media Platforms of VS)'),
+)
+
+class SubmitStoryModelJoinForm(forms.ModelForm):
+
     PRONOUNS_CHOICE = [
         ("", "Select One"),
         ("he, him, his", "he, him, his"),
@@ -53,6 +91,22 @@ class VolunteerJoinForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Volunteer
+        model = SubmitStoryModel
+        fields = "__all__"
+        exclude = ["created_at", "updated_at"]
+
+
+class VolunteerJoinModelForm(forms.ModelForm):
+    gender = forms.CharField(widget=forms.Select(choices=GENDER_CHOICES))
+    blood_group = forms.CharField(widget=forms.Select(choices=BLOOD_GROUP_CHOICES))
+    date_of_birth = forms.DateField(
+        required=False, widget=forms.DateInput(attrs={"type": "date"})
+    )
+    got_to_know_us = forms.CharField(widget=forms.Select(choices=GOT_TO_KNOW_CHOICES))
+    subscribe_to_newsletter = forms.CharField(widget=forms.Select(choices=SUBSCRIBE_CHOICES))
+
+
+    class Meta:
+        model = VolunteerJoinModel
         fields = "__all__"
         exclude = ["created_at", "updated_at"]

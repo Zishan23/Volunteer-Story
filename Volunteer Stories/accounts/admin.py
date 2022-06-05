@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from accounts.models import Image, Volunteer
+from accounts.models import Image, SubmitStoryModel, VolunteerJoinModel
 
 
 class ImageAdmin(admin.ModelAdmin):
@@ -29,13 +29,14 @@ class ImageAdmin(admin.ModelAdmin):
     list_filter = ()
 
 
-class VolunteerAdmin(admin.ModelAdmin):
+class SubmitStoryModelAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "email",
         "phone",
         "gender",
         "country",
+        "is_published",
         "assigned_to",
         "created_at",
     )
@@ -55,5 +56,27 @@ class VolunteerAdmin(admin.ModelAdmin):
     )
 
 
+class VolunteerJoinModelAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "email",
+        "phone",
+        "emergency_contact"
+    )
+    search_fields = (
+        "name",
+        "email",
+        "phone",
+    )
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+    )
+    filter_horizontal = ()
+    ordering = ("-created_at",)
+    fieldsets = ()
+
+
 admin.site.register(Image, ImageAdmin)
-admin.site.register(Volunteer, VolunteerAdmin)
+admin.site.register(SubmitStoryModel, SubmitStoryModelAdmin)
+admin.site.register(VolunteerJoinModel, VolunteerJoinModelAdmin)

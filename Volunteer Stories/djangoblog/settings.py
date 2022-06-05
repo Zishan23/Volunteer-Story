@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "django_social_share",
     'widget_tweaks',
+    'multiselectfield',
 ]
 
 MIDDLEWARE = [

@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
+from multiselectfield import MultiSelectField
 from blog.models import Category, SubCategory
 
 
@@ -19,7 +20,7 @@ class Image(models.Model):
         verbose_name_plural = _("Images")
 
 
-class Volunteer(models.Model):
+class SubmitStoryModel(models.Model):
     name = models.CharField(_("Name"), max_length=100)
     email = models.EmailField(_("Email"), max_length=100)
     phone = models.CharField(_("Phone"), max_length=15)
@@ -52,10 +53,49 @@ class Volunteer(models.Model):
     story_sub_category = models.ForeignKey(
         SubCategory, on_delete=models.CASCADE, verbose_name=_("Story Sub Category"))
     story_image = models.ImageField(upload_to="story_image")
+    is_published = models.BooleanField(_("Is Published"), default=False)
     assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = _("Volunteer")
-        verbose_name_plural = _("Volunteers")
+        verbose_name = _("Story")
+        verbose_name_plural = _("Stories")
+
+
+POST_CHOICES = (
+    ('Story Writer', 'Story Writer (Write a story from the interview)'),
+    ('Interviewer', 'Interviewer (Take interview of our guests)'),
+    ('Graphics Designer', 'Graphics Designer (Design Social Media Content and Edit Photos and Videos)'),
+    ('Social Media Officer', 'Social Media Officer (Handle and Prepare Content for Social Media Platforms of VS)'),
+)
+
+class VolunteerJoinModel(models.Model):
+    name = models.CharField(_("Name"), max_length=100)
+    email = models.EmailField(_("Email"), max_length=100)
+    gender = models.CharField(_("Gender"), max_length=20)
+    date_of_birth = models.DateField(_("Date of Birth"))
+    blood_group = models.CharField(_("Blood Group"), max_length=20)
+    phone = models.CharField(_("Phone"), max_length=15)
+    emergency_contact = models.CharField(_("Emergency Contact"), max_length=15)
+    present_address = models.TextField(_("Present Address"))
+    permanent_address = models.TextField(_("Permanent Address"))
+    social_media = models.CharField(_("Social Media"), max_length=150)
+    current_institution = models.CharField(_("Current Institution"), max_length=100)
+    department = models.CharField(_("Department"), max_length=100)
+    semester = models.CharField(_("Semester"), max_length=100)
+    post = MultiSelectField(_("Post"), choices=POST_CHOICES, max_length=100)
+    is_experienced = models.BooleanField(_("Is Experienced"), default=False)
+    previous_work = models.FileField(_("Previous Work"), upload_to="volunteer_join_previous_work", null=True, blank=True)
+    work_link = models.CharField(_("Work Link"), max_length=100, null=True, blank=True)
+    reason_to_join = models.TextField(_("Reason to Join"))
+    extra_curricular_activities = models.TextField(_("Extra Curricular Activities"), null=True, blank=True)
+    got_to_know_us = models.CharField(_("Got to Know Us Via"), max_length=100)
+    subscribe_to_newsletter = models.CharField(_("Subscribe to Newsletter"), max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _("Volunteer Join")
+        verbose_name_plural = _("Volunteer Joins")
+
