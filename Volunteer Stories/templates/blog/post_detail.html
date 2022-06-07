@@ -34,6 +34,7 @@
                 <div class="views"><i class="icon-eye"></i> 500</div>
                 <div class="comments meta-last"><i class="icon-comment"></i>{{ post.comment.count }}</div>
               </div>
+              {% comment %}
               {% if request.user.author == post.author %}
               <div class="ml-5 d-flex flex-end">
                 <a href="{{ post.get_update_url }}" class="btn btn-secondary">
@@ -44,6 +45,7 @@
                 </a>
               </div>
               {% endif %}
+              {% endcomment %}
             </div>
 
             <div class="post-body">
@@ -126,7 +128,7 @@
         </header>
         <div class="blog-posts">
           {% for post in latest_posts %}
-          <a href="#">
+          <a href="{{ post.get_absolute_url }}">
             <div class="item d-flex align-items-center">
               <div class="image"><img src="{{ post.thumbnail.url }}" alt="..." class="img-fluid"></div>
               <div class="title"><strong>{{ post.title }}</strong>
@@ -158,7 +160,7 @@
         </header>
         <div class="blog-posts">
           {% for post in similar_posts %}
-          <a href="#">
+          <a href="{{ post.get_absolute_url }}">
             <div class="item d-flex align-items-center">
               <div class="image"><img src="{{ post.thumbnail.url }}" alt="..." class="img-fluid"></div>
               <div class="title"><strong>{{ post.title }}</strong>

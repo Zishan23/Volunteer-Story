@@ -59,7 +59,7 @@ class Post(models.Model):
     thumbnail = models.ImageField(
         _("Thumbnail"), upload_to="thumbnail", default="testing.jpeg", blank=True
     )
-    slug = models.SlugField(_("Slug"), blank=True, null=True)
+    slug = models.CharField(_("Slug"), max_length=100, blank=True, null=True)
 
     class Meta:
         verbose_name = _("Post")

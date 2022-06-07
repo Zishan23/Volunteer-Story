@@ -8,13 +8,15 @@
 
 ## Table of Content 🎉
 
+- [Table of Content 🎉](#table-of-content-)
 - [Introduction](#introduction)
 - [Technologies](#technologies)
 - [Features](#features)
 - [Setup](#setup)
 - [Demo](#demo)
-- [Support & Updates](#support-and-updates)
-- [LICENSE](#license)
+- [Support And Updates](#support-and-updates)
+- [License](#license)
+- [To Everyone](#to-everyone)
 
 ## Introduction
 
@@ -57,7 +59,7 @@ $ docker-compose up --build
 
 ## Demo
 
-![Demoimg](demo.gif)
+![Demoimg](demo.png)
 
 ## Support And Updates
 
