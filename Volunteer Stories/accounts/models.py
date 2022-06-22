@@ -55,13 +55,13 @@ class SubmitStoryModel(models.Model):
     is_verified = models.BooleanField(_("Is Verified"), default=False)
     is_published = models.BooleanField(_("Is Published"), default=False)
     reviewed_by = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="reviewed_by"
+        User, on_delete=models.CASCADE, related_name="reviewed_by", null=True, blank=True
     )
     verified_by = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="verified_by"
+        User, on_delete=models.CASCADE, related_name="verified_by", null=True, blank=True
     )
     published_by = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="published_by"
+        User, on_delete=models.CASCADE, related_name="published_by", null=True, blank=True
     )
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
