@@ -20,7 +20,7 @@ class IndexView(View):
     def get(self, request, *args, **kwargs):
         page_name = "Home"
         featured_posts = Post.objects.filter(featured=True)[0:3]
-        latest_posts = Post.objects.order_by("-timestamp")[0:2]
+        latest_posts = Post.objects.order_by("-created_at")[0:2]
         images = Image.objects.filter(is_active=True)
         hero_images = [image for image in images if image.is_hero]
         divider_images = [image for image in images if image.is_divider]

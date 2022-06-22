@@ -45,18 +45,26 @@ class SubmitStoryModel(models.Model):
     nominee2_social_media = models.CharField(_("Nominee 2 Social Media"), max_length=50)
     nominee2_country = models.CharField(_("Nominee 2 Country"), max_length=50)
     nominee2_contact = models.CharField(_("Nominee 2 Contact"), max_length=50)
-    story_title = models.CharField(max_length=100)
-    story_overview = models.TextField(default="")
-    story_content = HTMLField()
-    story_category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, verbose_name=_("Story Category"))
-    story_sub_category = models.ForeignKey(
-        SubCategory, on_delete=models.CASCADE, verbose_name=_("Story Sub Category"))
-    story_image = models.ImageField(upload_to="story_image")
+    story_title = models.CharField(_("Story Title"), max_length=100)
+    story_overview = models.TextField(_("Story Overview"), default="")
+    story_content = HTMLField(_("Story Content"))
+    story_category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    story_sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
+    story_image = models.ImageField(_("Story Image"), upload_to="story_image")
+    is_reviewed = models.BooleanField(_("Is Reviewed"), default=False)
+    is_verified = models.BooleanField(_("Is Verified"), default=False)
     is_published = models.BooleanField(_("Is Published"), default=False)
-    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    reviewed_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="reviewed_by"
+    )
+    verified_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="verified_by"
+    )
+    published_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="published_by"
+    )
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     class Meta:
         verbose_name = _("Story")
@@ -64,11 +72,18 @@ class SubmitStoryModel(models.Model):
 
 
 POST_CHOICES = (
-    ('Story Writer', 'Story Writer (Write a story from the interview)'),
-    ('Interviewer', 'Interviewer (Take interview of our guests)'),
-    ('Graphics Designer', 'Graphics Designer (Design Social Media Content and Edit Photos and Videos)'),
-    ('Social Media Officer', 'Social Media Officer (Handle and Prepare Content for Social Media Platforms of VS)'),
+    ("Story Writer", "Story Writer (Write a story from the interview)"),
+    ("Interviewer", "Interviewer (Take interview of our guests)"),
+    (
+        "Graphics Designer",
+        "Graphics Designer (Design Social Media Content and Edit Photos and Videos)",
+    ),
+    (
+        "Social Media Officer",
+        "Social Media Officer (Handle and Prepare Content for Social Media Platforms of VS)",
+    ),
 )
+
 
 class VolunteerJoinModel(models.Model):
     name = models.CharField(_("Name"), max_length=100)
@@ -86,16 +101,24 @@ class VolunteerJoinModel(models.Model):
     semester = models.CharField(_("Semester"), max_length=100)
     post = MultiSelectField(_("Post"), choices=POST_CHOICES, max_length=100)
     is_experienced = models.BooleanField(_("Is Experienced"), default=False)
-    previous_work = models.FileField(_("Previous Work"), upload_to="volunteer_join_previous_work", null=True, blank=True)
+    previous_work = models.FileField(
+        _("Previous Work"),
+        upload_to="volunteer_join_previous_work",
+        null=True,
+        blank=True,
+    )
     work_link = models.CharField(_("Work Link"), max_length=100, null=True, blank=True)
     reason_to_join = models.TextField(_("Reason to Join"))
-    extra_curricular_activities = models.TextField(_("Extra Curricular Activities"), null=True, blank=True)
+    extra_curricular_activities = models.TextField(
+        _("Extra Curricular Activities"), null=True, blank=True
+    )
     got_to_know_us = models.CharField(_("Got to Know Us Via"), max_length=100)
-    subscribe_to_newsletter = models.CharField(_("Subscribe to Newsletter"), max_length=100)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    subscribe_to_newsletter = models.CharField(
+        _("Subscribe to Newsletter"), max_length=100
+    )
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     class Meta:
         verbose_name = _("Volunteer Join")
         verbose_name_plural = _("Volunteer Joins")
-

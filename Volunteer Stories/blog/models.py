@@ -11,6 +11,8 @@ from tinymce.models import HTMLField
 
 class Category(models.Model):
     title = models.CharField(_("Title"), max_length=50)
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     def __str__(self):
         return self.title
@@ -25,6 +27,8 @@ class SubCategory(models.Model):
         Category, verbose_name=_("Category"), on_delete=models.CASCADE
     )
     title = models.CharField(_("Title"), max_length=50)
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     def __str__(self):
         return self.title
@@ -37,29 +41,20 @@ class SubCategory(models.Model):
 class Post(models.Model):
     title = models.CharField(_("Title"), max_length=100)
     overview = models.TextField(_("Overview"), default="")
-    timestamp = models.DateTimeField(_("Timestamp"), auto_now=True)
-    content = HTMLField(default="<p>Hello World</p>")
+    content = HTMLField(_("Content"), default="<p>Hello World</p>")
     featured = models.BooleanField(_("Featured"), default=False)
     category = models.ForeignKey(
-        Category,
-        verbose_name=_("Category"),
-        related_name="post",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
+        Category, on_delete=models.SET_NULL, null=True, blank=True
     )
     sub_category = models.ForeignKey(
-        SubCategory,
-        verbose_name=_("Sub-Category"),
-        related_name="post",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
+        SubCategory, on_delete=models.SET_NULL, null=True, blank=True
     )
     thumbnail = models.ImageField(
         _("Thumbnail"), upload_to="thumbnail", default="testing.jpeg", blank=True
     )
     slug = models.CharField(_("Slug"), max_length=100, blank=True, null=True)
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     class Meta:
         verbose_name = _("Post")
@@ -96,24 +91,24 @@ class Post(models.Model):
 class Comment(models.Model):
     name = models.CharField(_("Name"), max_length=50)
     email = models.EmailField(_("Email"), max_length=254)
-    timestamp = models.DateTimeField(_("Timestamp"), auto_now=True)
     content = models.TextField(_("Content"))
-    post = models.ForeignKey(
-        Post, verbose_name=_("post"), on_delete=models.CASCADE, related_name="comment"
-    )
+    post = models.ForeignKey(Post, verbose_name=_("Post"), on_delete=models.CASCADE)
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     class Meta:
-        verbose_name = _("comment")
-        verbose_name_plural = _("comments")
+        verbose_name = _("Comment")
+        verbose_name_plural = _("Comments")
 
 
 class Newsletter(models.Model):
     email = models.EmailField(_("Email"), max_length=254)
-    timestamp = models.DateTimeField(_("Timestamp"), auto_now=True)
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     class Meta:
-        verbose_name = _("newsletter")
-        verbose_name_plural = _("newsletters")
+        verbose_name = _("Newsletter")
+        verbose_name_plural = _("Newsletters")
 
     def __str__(self):
         return self.email

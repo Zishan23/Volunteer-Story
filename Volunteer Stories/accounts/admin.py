@@ -34,14 +34,18 @@ class SubmitStoryModelAdmin(admin.ModelAdmin):
         "name",
         "email",
         "phone",
-        "gender",
-        "country",
+        "is_reviewed",
+        "is_verified",
         "is_published",
-        "assigned_to",
+        "reviewed_by",
+        "verified_by",
+        "published_by",
         "created_at",
     )
     search_fields = (
-        "assigned_to",
+        "reviewed_by",
+        "verified_by",
+        "published_by",
     )
     readonly_fields = (
         "created_at",
@@ -52,7 +56,9 @@ class SubmitStoryModelAdmin(admin.ModelAdmin):
     ordering = ("-created_at",)
     fieldsets = ()
     list_filter = (
-        "assigned_to",
+        "reviewed_by",
+        "verified_by",
+        "published_by",
     )
 
 

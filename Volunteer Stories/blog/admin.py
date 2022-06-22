@@ -3,7 +3,7 @@ from django.contrib import admin
 from blog.models import Category, SubCategory, Comment, Newsletter, Post
 
 class NewsletterAdmin(admin.ModelAdmin):
-    list_display = ["email", "timestamp"]
+    list_display = ["email", "created_at"]
     list_display_links = ["email"]
     list_filter = ["email"]
     search_fields = ["email"]
@@ -27,7 +27,7 @@ class SubCategoryAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ["name", "email", "content", "post", "timestamp"]
+    list_display = ["name", "email", "content", "post", "created_at"]
     list_display_links = ["name"]
     list_filter = ["name"]
     search_fields = ["name"]
@@ -35,7 +35,7 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ["title", "category", "sub_category", "timestamp"]
+    list_display = ["title", "category", "sub_category", "created_at"]
     list_display_links = ["title"]
     list_filter = ["title"]
     search_fields = ["title"]
