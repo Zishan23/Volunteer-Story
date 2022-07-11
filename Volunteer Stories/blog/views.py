@@ -87,7 +87,7 @@ class PostListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_name"] = self.page_name
-        context["latest_posts"] = Post.objects.all().order_by("-timestamp")[0:3]
+        context["latest_posts"] = Post.objects.all().order_by("-created_at")[0:3]
         context["categories"] = Category.objects.all()
         return context
 
