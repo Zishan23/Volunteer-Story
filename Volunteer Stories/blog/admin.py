@@ -1,8 +1,9 @@
 from django.contrib import admin
 
-from blog.models import Category, SubCategory, Comment, Newsletter, Post
+from blog.models import CategoryModel, SubCategoryModel, CommentModel, NewsletterModel, PostModel
 
-class NewsletterAdmin(admin.ModelAdmin):
+
+class NewsletterModelAdmin(admin.ModelAdmin):
     list_display = ["email", "timestamp"]
     list_display_links = ["email"]
     list_filter = ["email"]
@@ -10,7 +11,7 @@ class NewsletterAdmin(admin.ModelAdmin):
     list_per_page = 25
 
 
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryModelAdmin(admin.ModelAdmin):
     list_display = ["title",]
     list_display_links = ["title"]
     list_filter = ["title"]
@@ -18,7 +19,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list_per_page = 25
 
 
-class SubCategoryAdmin(admin.ModelAdmin):
+class SubCategoryModelAdmin(admin.ModelAdmin):
     list_display = ["title", "category"]
     list_display_links = ["title"]
     list_filter = ["title"]
@@ -26,7 +27,7 @@ class SubCategoryAdmin(admin.ModelAdmin):
     list_per_page = 25
 
 
-class CommentAdmin(admin.ModelAdmin):
+class CommentModelAdmin(admin.ModelAdmin):
     list_display = ["user", "content", "post", "timestamp"]
     list_display_links = ["user"]
     list_filter = ["user"]
@@ -34,7 +35,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_per_page = 25
 
 
-class PostAdmin(admin.ModelAdmin):
+class PostModelAdmin(admin.ModelAdmin):
     list_display = ["title", "category", "sub_category", "timestamp"]
     list_display_links = ["title"]
     list_filter = ["title"]
@@ -42,8 +43,8 @@ class PostAdmin(admin.ModelAdmin):
     list_per_page = 25
 
 
-admin.site.register(Post, PostAdmin)
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(SubCategory, SubCategoryAdmin)
-admin.site.register(Comment, CommentAdmin)
-admin.site.register(Newsletter, NewsletterAdmin)
+admin.site.register(PostModel, PostModelAdmin)
+admin.site.register(CategoryModel, CategoryModelAdmin)
+admin.site.register(SubCategoryModel, SubCategoryModelAdmin)
+admin.site.register(CommentModel, CommentModelAdmin)
+admin.site.register(NewsletterModel, NewsletterModelAdmin)
