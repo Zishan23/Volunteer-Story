@@ -1,15 +1,9 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from accounts.models import Author, Image, Volunteer
+from accounts.models import UserModel, ImageModel, VolunteerModel
 
 
-class AuthorAdmin(admin.ModelAdmin):
-    list_display = ["user", "picture",]
-    list_filter = []
-    search_fields = []
-
-
-class ImageAdmin(admin.ModelAdmin):
+class ImageModelAdmin(admin.ModelAdmin):
     def edit_button(self, obj):
         return format_html(
             '<a class="btn" href="/admin/accounts/image/{}/change/">Edit</a>', obj.id
@@ -35,7 +29,7 @@ class ImageAdmin(admin.ModelAdmin):
     list_filter = ()
 
 
-class VolunteerAdmin(admin.ModelAdmin):
+class VolunteerModelAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "email",
@@ -57,6 +51,6 @@ class VolunteerAdmin(admin.ModelAdmin):
     list_filter = ()
 
 
-admin.site.register(Author, AuthorAdmin)
-admin.site.register(Image, ImageAdmin)
-admin.site.register(Volunteer, VolunteerAdmin)
+admin.site.register(UserModel)
+admin.site.register(ImageModel, ImageModelAdmin)
+admin.site.register(VolunteerModel, VolunteerModelAdmin)
