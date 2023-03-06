@@ -1,18 +1,11 @@
-from django.contrib.auth.decorators import login_required
-from django.urls import path
+from rest_framework import routers
+from django.urls import path, include
+from rest_framework_simplejwt.views import TokenRefreshView
 
-from accounts import views
+from .views import *
 
 urlpatterns = [
-    path(
-        "accounts/register/", views.AuthorCreateView.as_view(), name="accounts_register"
-    ),
-    path(
-        "accounts/profile/",
-        login_required(views.AuthorUpdateView.as_view()),
-        name="accounts_update",
-    ),
-    path("about-us", views.about_us_view, name="about_us"),
-    path("our-team", views.our_team_view, name="our_team"),
-    path("join-us", views.join_us_view, name="join_as_volunteer"),
+    path('login/', LoginAPIView.as_view(), name="login"),
+    path('logout/', LogoutAPIView.as_view(), name="logout"),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
