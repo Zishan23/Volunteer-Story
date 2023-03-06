@@ -1,18 +1,18 @@
 from io import BytesIO
-from unicodedata import category
+from PIL import Image
+from tinymce.models import HTMLField
 
 from django.core.files.storage import default_storage
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
-from PIL import Image
-from tinymce.models import HTMLField
 
-from accounts.models import Author
+from accounts.models import UserModel
+from djangoblog.g_models import BaseModel
 
 
-class Category(models.Model):
+class CategoryModel(BaseModel):
     title = models.CharField(_("Title"), max_length=50)
 
     def __str__(self):
@@ -23,9 +23,9 @@ class Category(models.Model):
         verbose_name_plural = _("Categories")
 
 
-class SubCategory(models.Model):
+class SubCategoryModel(BaseModel):
     category = models.ForeignKey(
-        Category, verbose_name=_("Category"), on_delete=models.CASCADE
+        CategoryModel, verbose_name=_("Category"), on_delete=models.CASCADE
     )
     title = models.CharField(_("Title"), max_length=50)
 
@@ -37,14 +37,13 @@ class SubCategory(models.Model):
         verbose_name_plural = _("Sub-Categories")
 
 
-class Post(models.Model):
+class Post(BaseModel):
     title = models.CharField(_("Title"), max_length=100)
     overview = models.TextField(_("Overview"), default="")
-    timestamp = models.DateTimeField(_("Timestamp"), auto_now=True)
     content = HTMLField(default="<p>Hello World</p>")
     featured = models.BooleanField(_("Featured"), default=False)
     category = models.ForeignKey(
-        Category,
+        CategoryModel,
         verbose_name=_("Category"),
         related_name="post",
         null=True,
@@ -52,7 +51,7 @@ class Post(models.Model):
         on_delete=models.SET_NULL,
     )
     sub_category = models.ForeignKey(
-        SubCategory,
+        SubCategoryModel,
         verbose_name=_("Sub-Category"),
         related_name="post",
         null=True,
@@ -60,10 +59,10 @@ class Post(models.Model):
         on_delete=models.SET_NULL,
     )
     author = models.ForeignKey(
-        Author, verbose_name=_("Author"), on_delete=models.CASCADE
+        UserModel, verbose_name=_("Author"), on_delete=models.CASCADE, related_name="post"
     )
     thumbnail = models.ImageField(
-        _("Thumbnail"), upload_to="thumbnail", default="testing.jpeg", blank=True
+        _("Thumbnail"), upload_to="thumbnail", default="testing.jpeg", null=True, blank=True
     )
     slug = models.SlugField(_("Slug"), blank=True, null=True)
 
@@ -87,7 +86,7 @@ class Post(models.Model):
         return reverse("post_delete", kwargs={"slug": self.slug})
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.title, self.timestamp)
+        self.slug = slugify(self.title, self.created_at)
         super().save(*args, **kwargs)
         if self.thumbnail:
             img = Image.open(default_storage.open(self.thumbnail.name))
@@ -99,29 +98,27 @@ class Post(models.Model):
                 default_storage.save(self.thumbnail.name, buffer)
 
 
-class Comment(models.Model):
-    user = models.ForeignKey(Author, verbose_name=_("user"), on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(_("Timestamp"), auto_now=True)
+class Comment(BaseModel):
+    user = models.ForeignKey(UserModel, verbose_name=_("user"), on_delete=models.CASCADE, related_name="comment")
     content = models.TextField(_("Content"))
     post = models.ForeignKey(
         Post, verbose_name=_("post"), on_delete=models.CASCADE, related_name="comment"
     )
 
     class Meta:
-        verbose_name = _("comment")
-        verbose_name_plural = _("comments")
+        verbose_name = _("Comment")
+        verbose_name_plural = _("Comments")
 
     def __str__(self):
         return self.user.user.username
 
 
-class Newsletter(models.Model):
+class Newsletter(BaseModel):
     email = models.EmailField(_("Email"), max_length=254)
-    timestamp = models.DateTimeField(_("Timestamp"), auto_now=True)
 
     class Meta:
-        verbose_name = _("newsletter")
-        verbose_name_plural = _("newsletters")
+        verbose_name = _("Newsletter")
+        verbose_name_plural = _("Newsletters")
 
     def __str__(self):
         return self.email
