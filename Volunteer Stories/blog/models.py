@@ -37,7 +37,7 @@ class SubCategoryModel(BaseModel):
         verbose_name_plural = _("Sub-Categories")
 
 
-class Post(BaseModel):
+class PostModel(BaseModel):
     title = models.CharField(_("Title"), max_length=100)
     overview = models.TextField(_("Overview"), default="")
     content = HTMLField(default="<p>Hello World</p>")
@@ -98,11 +98,11 @@ class Post(BaseModel):
                 default_storage.save(self.thumbnail.name, buffer)
 
 
-class Comment(BaseModel):
+class CommentModel(BaseModel):
     user = models.ForeignKey(UserModel, verbose_name=_("user"), on_delete=models.CASCADE, related_name="comment")
     content = models.TextField(_("Content"))
     post = models.ForeignKey(
-        Post, verbose_name=_("post"), on_delete=models.CASCADE, related_name="comment"
+        PostModel, verbose_name=_("post"), on_delete=models.CASCADE, related_name="comment"
     )
 
     class Meta:
@@ -113,7 +113,7 @@ class Comment(BaseModel):
         return self.user.user.username
 
 
-class Newsletter(BaseModel):
+class NewsletterModel(BaseModel):
     email = models.EmailField(_("Email"), max_length=254)
 
     class Meta:
