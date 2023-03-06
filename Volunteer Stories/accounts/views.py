@@ -50,7 +50,7 @@ class LogoutAPIView(views.APIView):
             return Response({'detail': str(e)}, status=HTTP_400_BAD_REQUEST)
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserModelViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'head', 'options', 'post', 'put', 'patch', 'delete']
     queryset = UserModel.objects.all()
     search_fields = ['username', 'email']
