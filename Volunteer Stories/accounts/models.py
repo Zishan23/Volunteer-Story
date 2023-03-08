@@ -59,7 +59,6 @@ class UserModel(AbstractBaseUser, BaseModel, PermissionsMixin):
     picture = models.ImageField(
         _("Picture"),
         upload_to="thumbnail",
-        default="user-placeholder.jpg",
         null=True,
         blank=True,
     )

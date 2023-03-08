@@ -4,7 +4,7 @@ from blog.models import CategoryModel, SubCategoryModel, CommentModel, Newslette
 
 
 class NewsletterModelAdmin(admin.ModelAdmin):
-    list_display = ["email", "timestamp"]
+    list_display = ["email",]
     list_display_links = ["email"]
     list_filter = ["email"]
     search_fields = ["email"]
@@ -28,7 +28,7 @@ class SubCategoryModelAdmin(admin.ModelAdmin):
 
 
 class CommentModelAdmin(admin.ModelAdmin):
-    list_display = ["user", "content", "post", "timestamp"]
+    list_display = ["user", "content", "post", ]
     list_display_links = ["user"]
     list_filter = ["user"]
     search_fields = ["user"]
@@ -36,7 +36,7 @@ class CommentModelAdmin(admin.ModelAdmin):
 
 
 class PostModelAdmin(admin.ModelAdmin):
-    list_display = ["title", "category", "sub_category", "timestamp"]
+    list_display = ["title", "category", "sub_category",]
     list_display_links = ["title"]
     list_filter = ["title"]
     search_fields = ["title"]

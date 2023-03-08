@@ -1,4 +1,5 @@
 import os
+import datetime
 
 from celery.schedules import crontab
 
@@ -22,6 +23,8 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     "jazzmin",
+    "rest_framework",
+    "django_filters",
 
 
     "blog.apps.BlogConfig",
@@ -38,10 +41,9 @@ INSTALLED_APPS = [
     
     "storages",
     "tinymce",
-    "crispy_forms",
-    "django_social_share",
-    'widget_tweaks',
 ]
+
+AUTH_USER_MODEL = "accounts.UserModel"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -109,7 +111,29 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-# TinyMCE
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=7),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=21),
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    "TOKEN_TYPE_CLAIM": "token_type",
+    "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
+
+    "JTI_CLAIM": "jti",
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    # 'AUTH_HEADER_NAME': 'AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+}
+
 TINYMCE_DEFAULT_CONFIG = {
     "plugins": """
             textcolor save link image media preview codesample contextmenu
@@ -132,7 +156,22 @@ TINYMCE_DEFAULT_CONFIG = {
     "menubar": True,
     "statusbar": True,
 }
+
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DATETIME_INPUT_FORMATS': ['%Y-%m-%d %H:%M', '%Y-%m-%d'],
+    'DATETIME_FORMAT': '%Y-%m-%d %H:%M',  # For Am/Pm: %Y-%m-%d %I:%M %p
+}
 
 
 # Internationalization
@@ -192,3 +231,5 @@ if os.environ.get("AWS_ACCESS_KEY_ID"):  # pragma:no cover
     AWS_DEFAULT_ACL = None
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
     STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

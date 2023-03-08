@@ -65,6 +65,15 @@ class PostModel(BaseModel):
         _("Thumbnail"), upload_to="thumbnail", default="testing.jpeg", null=True, blank=True
     )
     slug = models.SlugField(_("Slug"), blank=True, null=True)
+    is_published = models.BooleanField(_("Published"), default=False)
+    accepted_by = models.ForeignKey(
+        UserModel,
+        verbose_name=_("Accepted By"),
+        on_delete=models.SET_NULL,
+        related_name="accepted_post",
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         verbose_name = _("Post")
