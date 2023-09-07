@@ -2,7 +2,7 @@ version: "3.4"
 
 services:
   web:
-    image: fantastic-django-blog
+    image: volunteer-story
     build:
       context: .
       dockerfile: Dockerfile
@@ -26,7 +26,7 @@ services:
     restart: always
 
   celery:
-    image: fantastic-django-blog
+    image: volunteer-story
     command: celery -A djangoblog worker -l info
     restart: always
     depends_on:
@@ -34,7 +34,7 @@ services:
     env_file: .env
 
   celery-beat:
-    image: fantastic-django-blog
+    image: volunteer-story
     command: celery -A djangoblog beat -l info
     restart: always
     depends_on:

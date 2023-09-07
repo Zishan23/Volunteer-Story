@@ -1,5 +1,4 @@
 from io import BytesIO
-from unicodedata import category
 from django.core.files.storage import default_storage
 from django.db import models
 from django.shortcuts import reverse
@@ -8,11 +7,11 @@ from django.utils.translation import gettext_lazy as _
 from PIL import Image
 from tinymce.models import HTMLField
 
+from common.models import BaseModel
 
-class Category(models.Model):
+
+class Category(BaseModel):
     title = models.CharField(_("Title"), max_length=50)
-    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     def __str__(self):
         return self.title
@@ -22,13 +21,11 @@ class Category(models.Model):
         verbose_name_plural = _("Categories")
 
 
-class SubCategory(models.Model):
+class SubCategory(BaseModel):
     category = models.ForeignKey(
         Category, verbose_name=_("Category"), on_delete=models.CASCADE
     )
     title = models.CharField(_("Title"), max_length=50)
-    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     def __str__(self):
         return self.title
@@ -38,7 +35,7 @@ class SubCategory(models.Model):
         verbose_name_plural = _("Sub-Categories")
 
 
-class Post(models.Model):
+class Post(BaseModel):
     title = models.CharField(_("Title"), max_length=100)
     overview = models.TextField(_("Overview"), default="")
     content = HTMLField(_("Content"), default="<p>Hello World</p>")
@@ -53,8 +50,6 @@ class Post(models.Model):
         _("Thumbnail"), upload_to="thumbnail", default="testing.jpeg", blank=True
     )
     slug = models.CharField(_("Slug"), max_length=100, blank=True, null=True)
-    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     class Meta:
         verbose_name = _("Post")
@@ -76,7 +71,8 @@ class Post(models.Model):
         return reverse("post_delete", kwargs={"slug": self.slug})
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.title, self.timestamp)
+        created_at_str = self.created_at.strftime("%Y-%m-%d")
+        self.slug = slugify(self.title, created_at_str)
         super().save(*args, **kwargs)
         if self.thumbnail:
             img = Image.open(default_storage.open(self.thumbnail.name))
@@ -88,23 +84,19 @@ class Post(models.Model):
                 default_storage.save(self.thumbnail.name, buffer)
 
 
-class Comment(models.Model):
+class Comment(BaseModel):
     name = models.CharField(_("Name"), max_length=50)
     email = models.EmailField(_("Email"), max_length=254)
     content = models.TextField(_("Content"))
     post = models.ForeignKey(Post, verbose_name=_("Post"), on_delete=models.CASCADE)
-    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     class Meta:
         verbose_name = _("Comment")
         verbose_name_plural = _("Comments")
 
 
-class Newsletter(models.Model):
+class Newsletter(BaseModel):
     email = models.EmailField(_("Email"), max_length=254)
-    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     class Meta:
         verbose_name = _("Newsletter")

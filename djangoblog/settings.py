@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-+@3)h!+1^)n1z5k!^)9^q$&y0x6j3+@%k^@0$1!-^4e5k9x@4-")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG", default=False)
+DEBUG = env("DEBUG", default=True)
 
 ALLOWED_HOSTS = ["*"]
 
@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "jazzmin",
 
 
+    'common.apps.CommonConfig',
     "blog.apps.BlogConfig",
     "accounts.apps.AccountsConfig",
 
@@ -47,6 +48,8 @@ INSTALLED_APPS = [
     "django_social_share",
     'widget_tweaks',
     'multiselectfield',
+    'import_export',
+    'flower',
 ]
 
 MIDDLEWARE = [
@@ -145,9 +148,9 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = "en-in"
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "Asia/Kolkata"
+TIME_ZONE = "Asia/Dhaka"
 
 USE_I18N = True
 
@@ -160,7 +163,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")

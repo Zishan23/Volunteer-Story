@@ -1,55 +1,54 @@
 {% extends '../blog/layout.html' %}
 {% load static %}
+{% block title %}{{ page_name }}{% endblock title %}
 {% block content %}
 <div class="container">
     <div class="row m-5">
         <div class="col-lg-12">
-            <div class="text-center h3">Meet the  Team</div>
-            <hr />
+            <div class="text-center h3">Meet the Team</div>
+            <hr/>
             <div class="row">
-                <div class="col-lg-4">
-                    <div class="text-center">
-                        <img src="{% static "user-placeholder.jpg" %}" height="80%" width="80%" />
-                        <p>Alice</p>
-                        <p>Post</p>
+                {% for team_member in team_members %}
+                <div class="col-md-4">
+                    <div class="team-member text-center">
+                        {% if team_member.image %}
+                        <img src="{{ team_member.image.url }}" alt="{{ team_member.name }}"
+                             class="img-fluid rounded-circle" height="70%" width="70%"/>
+                        {% else %}
+                        <img src="{% static 'user-placeholder.jpg' %}" alt="{{ team_member.name }}"
+                             class="img-fluid rounded-circle" height="70%" width="70%"/>
+                        {% endif %}
+                        <h3>{{ team_member.name }}</h3>
+                        <p>{{ team_member.designation }}</p>
+                        <ul class="list-inline social-links">
+                            {% if team_member.facebook_link %}
+                            <li class="list-inline-item">
+                                <a href="{{ team_member.facebook_link }}"
+                                   target="_blank"><i class="fa fa-facebook"></i></a>
+                            </li>
+                            {% endif %}
+                            {% if team_member.twitter_link %}
+                            <li class="list-inline-item">
+                                <a href="{{ team_member.twitter_link }}"
+                                   target="_blank"><i class="fa fa-twitter"></i></a>
+                            </li>
+                            {% endif %}
+                            {% if team_member.instagram_link %}
+                            <li class="list-inline-item">
+                                <a href="{{ team_member.instagram_link }}"
+                                   target="_blank"><i class="fa fa-instagram"></i></a>
+                            </li>
+                            {% endif %}
+                            {% if team_member.linkedin_link %}
+                            <li class="list-inline-item">
+                                <a href="{{ team_member.linkedin_link }}"
+                                   target="_blank"><i class="fa fa-linkedin"></i></a>
+                            </li>
+                            {% endif %}
+                        </ul>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="text-center">
-                        <img src="{% static "user-placeholder.jpg" %}" height="80%" width="80%" />
-                        <p>Alice</p>
-                        <p>Post</p>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="text-center">
-                        <img src="{% static "user-placeholder.jpg" %}" height="80%" width="80%" />
-                        <p>Alice</p>
-                        <p>Post</p>
-                    </div>
-                </div>
-            </div><div class="row">
-                <div class="col-lg-4">
-                    <div class="text-center">
-                        <img src="{% static "user-placeholder.jpg" %}" height="80%" width="80%" />
-                        <p>Alice</p>
-                        <p>Post</p>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="text-center">
-                        <img src="{% static "user-placeholder.jpg" %}" height="80%" width="80%" />
-                        <p>Alice</p>
-                        <p>Post</p>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="text-center">
-                        <img src="{% static "user-placeholder.jpg" %}" height="80%" width="80%" />
-                        <p>Alice</p>
-                        <p>Post</p>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>

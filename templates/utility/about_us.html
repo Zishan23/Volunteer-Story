@@ -1,5 +1,6 @@
 {% extends '../blog/layout.html' %}
 {% load static %}
+{% block title %}{{ page_name }}{% endblock title %}
 {% block content %}
 <div class="container">
     <div class="row m-5">
@@ -8,8 +9,8 @@
         </div>
     </div>
     <hr />
-    <div class="row m-5">
-        <div class="col-lg-6">
+    <div class="row m-5" style="display: flex; justify-content: center; align-items: center;">
+        <div class="col-lg-6 col-sm-12">
             <div class="text-center mx-auto justify-content-center">
                 <h4 class="display-6">
                     Volunteer Stories aims to acknowledge and highlight the inspiring stories of volunteers from all
@@ -20,7 +21,7 @@
                 </h4>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-sm-12">
             <div class="text-center">
                 <img src="{% static 'blog/img/vision.png' %}" class="img-fluid" alt="Responsive image" height="400px"
                     width="400px">
@@ -33,20 +34,20 @@
         </div>
     </div>
     <hr />
-    <div class="row m-5">
-        <div class="col-lg-6">
+    <div class="row m-5" style="display: flex; justify-content: center; align-items: center;">
+        <div class="col-lg-6 col-sm-12">
             <div class="text-center">
                 <img src="{% static 'blog/img/mission.png' %}" class="img-fluid" alt="Responsive image" height="400px"
                     width="400px">
             </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-sm-12">
             <div class="text-center mx-auto justify-content-center">
-                <h4 class="display-6">
+                <h4 class="text-center display-6">
                     Volunteer Stories aims to acknowledge and highlight the inspiring stories of volunteers from all
                     around
                     the world!<br /><br />
-                    So,sign up in the following form to let us spread positivity in the world with YOUR volunteering
+                    So, sign up in the following form to let us spread positivity in the world with YOUR volunteering
                     stories!
                 </h4>
             </div>

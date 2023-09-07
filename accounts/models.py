@@ -1,26 +1,28 @@
 from django.contrib.auth.models import User
-from django.db import models
-from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 from multiselectfield import MultiSelectField
 from blog.models import Category, SubCategory
+from io import BytesIO
+from django.core.files.storage import default_storage
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+from PIL import Image
+
+from common.models import BaseModel
 
 
-class Image(models.Model):
+class ImageModel(BaseModel):
     image = models.ImageField(_("Image"), upload_to="website_images", blank=True)
-    is_active = models.BooleanField(_("Is active"), default=False)
     is_hero = models.BooleanField(_("Is hero"), default=False)
     is_divider = models.BooleanField(_("Is divider"), default=False)
     is_gallery = models.BooleanField(_("Is banner"), default=False)
-    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     class Meta:
         verbose_name = _("Image")
         verbose_name_plural = _("Images")
 
 
-class SubmitStoryModel(models.Model):
+class SubmitStoryModel(BaseModel):
     name = models.CharField(_("Name"), max_length=100)
     email = models.EmailField(_("Email"), max_length=100)
     phone = models.CharField(_("Phone"), max_length=15)
@@ -63,8 +65,6 @@ class SubmitStoryModel(models.Model):
     published_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="published_by", null=True, blank=True
     )
-    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     class Meta:
         verbose_name = _("Story")
@@ -85,7 +85,7 @@ POST_CHOICES = (
 )
 
 
-class VolunteerJoinModel(models.Model):
+class VolunteerJoinModel(BaseModel):
     name = models.CharField(_("Name"), max_length=100)
     email = models.EmailField(_("Email"), max_length=100)
     gender = models.CharField(_("Gender"), max_length=20)
@@ -116,9 +116,44 @@ class VolunteerJoinModel(models.Model):
     subscribe_to_newsletter = models.CharField(
         _("Subscribe to Newsletter"), max_length=100
     )
-    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
 
     class Meta:
         verbose_name = _("Volunteer Join")
         verbose_name_plural = _("Volunteer Joins")
+
+
+class TeamMemberModel(BaseModel):
+    name = models.CharField(_("Name"), max_length=100)
+    email = models.EmailField(_("Email"), max_length=100, null=True, blank=True)
+    phone = models.CharField(_("Phone"), max_length=15, null=True, blank=True)
+    designation = models.CharField(_("Designation"), max_length=200, null=True, blank=True)
+    address = models.TextField(_("Address"), null=True, blank=True)
+    image = models.ImageField(_("Image"), upload_to='team_members/', null=True, blank=True)
+    serial = models.IntegerField(_("Serial"), default=0)
+    description = models.TextField(_("Description"), null=True, blank=True)
+    facebook_link = models.URLField(_("Facebook Link"), null=True, blank=True)
+    twitter_link = models.URLField(_("Twitter Link"), null=True, blank=True)
+    instagram_link = models.URLField(_("Instagram Link"), null=True, blank=True)
+    linkedin_link = models.URLField(_("Linkedin Link"), null=True, blank=True)
+
+    class Meta:
+        verbose_name = _('Team Member')
+        verbose_name_plural = _('Team Members')
+        ordering = ['serial']
+
+    def __str__(self):
+        return f"{self.name} - {self.designation}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.image:
+            image = Image.open(self.image)
+            image.thumbnail((200, 200))
+            image_data = BytesIO()
+            if image.mode in ("RGBA", "P"):
+                image = image.convert("RGB")
+            image.save(image_data, format="JPEG")
+            thumbnail_name = f"thumbnail_{self.image.name}"
+            default_storage.save(thumbnail_name, image_data)
+            self.thumbnail_image = thumbnail_name
+            super().save(*args, **kwargs)

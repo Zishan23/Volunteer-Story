@@ -1,36 +1,40 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
 from django.utils.html import format_html
-from accounts.models import Image, SubmitStoryModel, VolunteerJoinModel
+
+from accounts.models import ImageModel, SubmitStoryModel, VolunteerJoinModel, TeamMemberModel
+
+from common.admin import RawIdFieldsAdmin
 
 
-class ImageAdmin(admin.ModelAdmin):
+@admin.register(ImageModel)
+class ImageAdmin(ImportExportModelAdmin, RawIdFieldsAdmin):
     def edit_button(self, obj):
         return format_html(
             '<a class="btn" href="/admin/accounts/image/{}/change/">Edit</a>', obj.id
         )
 
     list_display = (
+        "id",
         "image",
-        "is_active",
         "is_hero",
         "is_divider",
         "is_gallery",
-        "edit_button",
+        # "edit_button",
     )
     search_fields = ()
     readonly_fields = (
-        "created_at",
-        "updated_at",
     )
 
     filter_horizontal = ()
     ordering = ("-created_at",)
     fieldsets = ()
-    list_filter = ()
 
 
-class SubmitStoryModelAdmin(admin.ModelAdmin):
+@admin.register(SubmitStoryModel)
+class NewsletterAdmin(ImportExportModelAdmin, RawIdFieldsAdmin):
     list_display = (
+        "id",
         "name",
         "email",
         "phone",
@@ -40,7 +44,6 @@ class SubmitStoryModelAdmin(admin.ModelAdmin):
         "reviewed_by",
         "verified_by",
         "published_by",
-        "created_at",
     )
     search_fields = (
         "reviewed_by",
@@ -48,8 +51,6 @@ class SubmitStoryModelAdmin(admin.ModelAdmin):
         "published_by",
     )
     readonly_fields = (
-        "created_at",
-        "updated_at",
     )
 
     filter_horizontal = ()
@@ -62,8 +63,10 @@ class SubmitStoryModelAdmin(admin.ModelAdmin):
     )
 
 
-class VolunteerJoinModelAdmin(admin.ModelAdmin):
+@admin.register(VolunteerJoinModel)
+class NewsletterAdmin(ImportExportModelAdmin, RawIdFieldsAdmin):
     list_display = (
+        "id",
         "name",
         "email",
         "phone",
@@ -75,14 +78,26 @@ class VolunteerJoinModelAdmin(admin.ModelAdmin):
         "phone",
     )
     readonly_fields = (
-        "created_at",
-        "updated_at",
     )
     filter_horizontal = ()
     ordering = ("-created_at",)
     fieldsets = ()
 
 
-admin.site.register(Image, ImageAdmin)
-admin.site.register(SubmitStoryModel, SubmitStoryModelAdmin)
-admin.site.register(VolunteerJoinModel, VolunteerJoinModelAdmin)
+@admin.register(TeamMemberModel)
+class TeamMemberModelAdmin(ImportExportModelAdmin, RawIdFieldsAdmin):
+    list_display = (
+        'id',
+        'name',
+        'designation',
+        'serial',
+    )
+    list_filter = (
+    )
+    search_fields = ('name', 'designation')
+    fieldsets = (
+        (None, {'fields': (
+            'name', 'designation', 'image', 'serial', 'facebook_link', 'twitter_link', 'instagram_link', 'linkedin_link')}),
+        ('Status', {'fields': ('is_active', 'is_deleted')}),
+        ('Dates', {'fields': ('created_at', 'updated_at')}),
+    )

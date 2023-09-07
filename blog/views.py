@@ -11,23 +11,23 @@ from django.views.generic import (
     View,
 )
 
-from accounts.models import Image
+from accounts.models import ImageModel
 from blog.forms import *
 from blog.models import Category, SubCategory, Newsletter, Post
 
 
 class IndexView(View):
     def get(self, request, *args, **kwargs):
-        page_name = "Home"
+        page_name = "Home | "
         featured_posts = Post.objects.filter(featured=True)[0:3]
         latest_posts = Post.objects.order_by("-created_at")[0:2]
-        images = Image.objects.filter(is_active=True)
+        images = ImageModel.objects.filter(is_active=True)
         hero_images = [image for image in images if image.is_hero]
         divider_images = [image for image in images if image.is_divider]
         gallery_images = [image for image in images if image.is_gallery]
         hero_image = hero_images[0] if hero_images else None
         divider_image = divider_images[0] if divider_images else None
-        
+
         newsletter_form = NewsletterForm()
         if request.method == "POST":
             newsletter_form = NewsletterForm(request.POST)
@@ -35,7 +35,7 @@ class IndexView(View):
                 newsletter_form.save()
                 messages.info(request, "Successfully subscribed!")
                 return redirect("index")
-        
+
         context = {
             "page_name": page_name,
             "featured_posts": featured_posts,
@@ -79,7 +79,7 @@ def post_detail_view(request, slug):
 
 
 class PostListView(ListView):
-    page_name = "Blog"
+    page_name = "Blog | "
     model = Post
     template_name = "blog/post_list.html"
     paginate_by = 4
@@ -103,12 +103,17 @@ def categorized_post_view(request, category):
 
 
 class SearchView(View):
+    page_name = "Search | "
+
     def get(self, request, *args, **kwargs):
         q = request.GET.get("q", "")
         search_result = Post.objects.filter(
             Q(title__icontains=q) | Q(overview__icontains=q)
         ).all()
-        context = {"search_result": search_result}
+        context = {
+            "page_name": self.page_name,
+            "search_result": search_result,
+        }
         return render(request, "blog/search.html", context=context)
 
 
