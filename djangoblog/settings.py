@@ -15,10 +15,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY", default="django-insecure-+@3)h!+1^)n1z5k!^)9^q$&y0x6j3+@%k^@0$1!-^4e5k9x@4-")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG")
+DEBUG = env("DEBUG", default=False)
 
 ALLOWED_HOSTS = ["*"]
 
@@ -89,12 +89,12 @@ WSGI_APPLICATION = "djangoblog.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": env("DB_ENGINE"),
-        "NAME": env("DB_NAME"),
-        "USER": env("DB_USER"),
-        "PASSWORD": env("DB_PASSWORD"),
-        "HOST": env("DB_HOST"),
-        "PORT": env("DB_PORT"),
+        "ENGINE": env("DB_ENGINE", default="django.db.backends.sqlite3"),
+        "NAME": env("DB_NAME", default=os.path.join(BASE_DIR, "db.sqlite3")),
+        "USER": env("DB_USER", default=""),
+        "PASSWORD": env("DB_PASSWORD", default=""),
+        "HOST": env("DB_HOST", default=""),
+        "PORT": env("DB_PORT", default=""),
     }
 }
 
@@ -168,22 +168,22 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 LOGIN_REDIRECT_URL = "/"
 
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = env("EMAIL_HOST")
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
-
-if env("AWS_ACCESS_KEY_ID"):  # pragma:no cover
-    AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
-    AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
-    AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
-    AWS_S3_REGION_NAME = "ap-south-1"
-    AWS_IS_GZIPPED = True
-    AWS_DEFAULT_ACL = None
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-    STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_HOST = env("EMAIL_HOST")
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+# EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+# 
+# if env("AWS_ACCESS_KEY_ID"):  # pragma:no cover
+#     AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+#     AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+#     AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+#     AWS_S3_REGION_NAME = "ap-south-1"
+#     AWS_IS_GZIPPED = True
+#     AWS_DEFAULT_ACL = None
+#     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+#     STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
